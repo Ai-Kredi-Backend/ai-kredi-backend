@@ -26,27 +26,41 @@
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Seedance / BytePlus Mesh Background */
         body {
             background-color: #06070B;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
-            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Canvas Arka Plan */
+        #space-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
         }
 
         /* Glassmorphism Studio Cards */
         .studio-card {
-            background: rgba(18, 21, 31, 0.6);
+            background: rgba(18, 21, 31, 0.75);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
         }
 
-        .studio-card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+        .studio-card-interactive {
+            background: rgba(12, 14, 20, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .studio-card-interactive:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.25);
         }
 
         /* Glow Text Gradient */
@@ -75,12 +89,15 @@
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen font-sans flex flex-col justify-between relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
+<body class="text-slate-100 min-h-screen font-sans flex flex-col justify-between relative selection:bg-indigo-500 selection:text-white">
+
+    <!-- Uzay & Dönen/Süzülen Token Arka Planı -->
+    <canvas id="space-canvas"></canvas>
 
     <!-- Toast Bildirim Kabuğu -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3"></div>
 
-    <!-- Header Navigation Bar (Seedance Style) -->
+    <!-- Header Navigation Bar -->
     <header class="studio-card sticky top-0 z-40 px-6 py-4 flex justify-between items-center border-b border-slate-800/60">
         <div class="flex items-center gap-3 cursor-pointer" onclick="showLanding()">
             <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/20">
@@ -100,34 +117,16 @@
         </div>
     </header>
 
-    <!-- ==================== LANDING PAGE (SEEDANCE / BYTEPLUS STYLE) ==================== -->
-    <main id="landing-page" class="container mx-auto px-4 py-12 max-w-5xl flex-1 flex flex-col justify-center relative z-10">
+    <!-- ==================== LANDING PAGE (SORA/SEEDANCE STYLE) ==================== -->
+    <main id="landing-page" class="container mx-auto px-4 py-8 max-w-5xl flex-1 flex flex-col justify-center relative z-10">
         
-        <!-- Hero Tagline -->
-        <div class="text-center space-y-4 mb-10">
+        <!-- Hero Title -->
+        <div class="text-center space-y-3 mb-8">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full studio-card border border-indigo-500/30 text-indigo-300 text-xs font-medium tracking-wide">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sınırsız AI Üretim Gücü — API Entegrasyonlu
             </div>
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-gradient leading-tight">
+            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-gradient leading-tight">
                 Hayallerini AI ile Üret,<br class="hidden md:block"/> Yüksek Maliyetlere Takılma.
             </h1>
-            <p class="text-slate-400 text-base max-w-2xl mx-auto leading-relaxed">
-                Sora, Runway, Midjourney, Suno ve ChatGPT-4o için aylık yüksek abonelikler ödeme. Yalnızca harcadığın kadar ucuz bakiye yükle ve anında üretmeye başla.
-            </p>
-        </div>
-
-        <!-- Interactive Dynamic AI Prompt / Scenario Carousel Box -->
-        <div class="studio-card p-6 md:p-8 rounded-3xl mb-12 border border-indigo-500/20 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div id="carousel-track" class="min-h-[160px] flex items-center">
-                <!-- Javascript Otomatik Yükleyecek -->
-            </div>
-
-            <div class="flex justify-between items-center mt-6 pt-4 border-t border-slate-800/80">
-                <span class="text-xs text-slate-500 flex items-center gap-1.5">
-                    <i class="fa-solid fa-bolt text-yellow-400"></i> Anında Teslimat & Esnek Bakiye
-                </span>
-                <div class="flex gap-2" id="carousel-dots">
-                    <button onclick="setSlide(0)" class="w-2.5 h-2.5 rounded-full bg-indigo-500 transition-all"></button>
-                    <button onclick="setSlide(1)" class="w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></
+            <p class="text-slate-400 text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
+                Sora, Runway, Midjourney, Suno ve ChatGPT-4o için ayl
