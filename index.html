@@ -47,6 +47,7 @@
             background: rgba(12, 14, 20, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         .studio-card-interactive:hover {
             border-color: rgba(99, 102, 241, 0.6);
@@ -86,7 +87,7 @@
     </header>
 
     <!-- ==================== 1. LANDING PAGE ==================== -->
-    <div id="landing-page" style="display: flex;" class="container mx-auto px-4 py-8 max-w-5xl flex-1 flex-col justify-center relative z-10">
+    <main id="landing-page" style="display: flex;" class="container mx-auto px-4 py-8 max-w-5xl flex-1 flex-col justify-center relative z-10">
         <div class="text-center space-y-3 mb-6">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full studio-card border border-indigo-500/30 text-indigo-300 text-xs font-medium tracking-wide">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sınırsız AI Üretim Gücü — API Entegrasyonlu
@@ -101,7 +102,7 @@
 
         <div class="studio-card p-6 md:p-8 rounded-3xl mb-6 border border-indigo-500/40 relative overflow-hidden shadow-2xl">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div onclick="goToDashboard('Giriş Yapıldı')" class="studio-card-interactive p-5 rounded-2xl cursor-pointer group">
+                <div id="btn-login" class="studio-card-interactive p-5 rounded-2xl group">
                     <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-base mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
                         <i class="fa-solid fa-right-to-bracket"></i>
                     </div>
@@ -109,7 +110,7 @@
                     <p class="text-slate-400 text-xs leading-relaxed">Mevcut hesabınla bağlan, API anahtarını yönet.</p>
                 </div>
 
-                <div onclick="goToDashboard('Üye Olundu & Bonus Tanımlandı')" class="studio-card-interactive p-5 rounded-2xl border border-indigo-500/40 relative cursor-pointer group">
+                <div id="btn-register" class="studio-card-interactive p-5 rounded-2xl border border-indigo-500/40 relative group">
                     <span class="absolute top-2.5 right-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md">+%12.5 BONUS</span>
                     <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-base mb-3 group-hover:bg-purple-600 group-hover:text-white transition">
                         <i class="fa-solid fa-user-plus"></i>
@@ -118,7 +119,7 @@
                     <p class="text-slate-400 text-xs leading-relaxed">Hesap aç, katmanlı bakiye yüklemelerinde bonus kazan.</p>
                 </div>
 
-                <div onclick="goToDashboard('Misafir Oturumu Başlatıldı')" class="studio-card-interactive p-5 rounded-2xl border border-emerald-500/30 cursor-pointer group">
+                <div id="btn-guest" class="studio-card-interactive p-5 rounded-2xl border border-emerald-500/30 group">
                     <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base mb-3 group-hover:bg-emerald-600 group-hover:text-white transition">
                         <i class="fa-solid fa-bolt-lightning"></i>
                     </div>
@@ -127,11 +128,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- ==================== 2. APP DASHBOARD ==================== -->
-    <div id="app-dashboard" style="display: none;" class="container mx-auto px-4 py-8 max-w-6xl flex-1 relative z-10">
-        
+    <main id="app-dashboard" style="display: none;" class="container mx-auto px-4 py-8 max-w-6xl flex-1 relative z-10">
         <div class="studio-card p-6 rounded-2xl mb-8 border border-indigo-500/30">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -142,7 +142,7 @@
                 </div>
                 <div class="flex items-center gap-2 w-full md:w-auto">
                     <input type="text" id="api-key-box" readonly value="ai_live_99f8a4b2c1d3e5f67890" class="bg-studio-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 w-full md:w-72">
-                    <button onclick="copyApiKey()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl transition whitespace-nowrap">
+                    <button id="btn-copy" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl transition whitespace-nowrap">
                         <i class="fa-solid fa-copy mr-1"></i> Kopyala
                     </button>
                 </div>
@@ -156,77 +156,87 @@
                 </h3>
                 <div>
                     <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Yüklenecek Tutar (TL)</label>
-                    <p class="text-[11px] text-slate-500 mb-2">0 - 500 TL arası serbest tutar girebilirsiniz (501 TL üzeri bonus katmanına girer).</p>
-                    <input type="number" id="custom-tl-amount" oninput="calculateTopup()" placeholder="0 - 500 TL (Serbest Tutar)" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-white font-mono">
+                    <input type="number" id="custom-tl-amount" placeholder="0 - 500 TL (Serbest Tutar)" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-white font-mono">
                 </div>
                 <div class="flex justify-between items-center bg-studio-900 p-3 rounded-xl border border-slate-800 text-xs font-mono">
                     <span class="text-slate-400">Ödenecek USDT Karşılığı:</span>
                     <span id="usdt-conversion" class="text-emerald-400 font-bold">0.00 USDT (Kur: 34 TL)</span>
                 </div>
-                <button onclick="submitTopupRequest()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition text-xs shadow-lg">
+                <button id="btn-submit-topup" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition text-xs shadow-lg">
                     Ödeme Bildirimi Gönder
                 </button>
             </div>
-
-            <div class="studio-card p-6 rounded-2xl space-y-4">
-                <h3 class="text-base font-bold flex items-center gap-2 text-white">
-                    <i class="fa-solid fa-terminal text-indigo-400"></i> Hızlı API Entegrasyon Örneği
-                </h3>
-                <div class="bg-black/80 border border-slate-800 p-4 rounded-xl font-mono text-[11px] text-indigo-300 overflow-x-auto space-y-1">
-                    <div>curl -X POST https://aikredibackend.online/v1/generate \</div>
-                    <div class="pl-4">-H "Authorization: Bearer <span class="text-emerald-400">ai_live_...</span>"</div>
-                </div>
-            </div>
         </div>
-    </div>
+    </main>
 
     <footer class="border-t border-slate-900 py-6 text-center text-xs text-slate-600 relative z-10">
         AI Credit Hub &copy; 2026 — Next-Generation AI Studio
     </footer>
 
     <script>
-        // Kesin Geçiş Fonksiyonları (Inline style kullanarak display flex/none çakışmalarını sıfırlıyoruz)
-        function goToDashboard(msg) {
-            document.getElementById('landing-page').style.display = 'none';
-            document.getElementById('app-dashboard').style.display = 'block';
-            document.getElementById('user-header-info').style.display = 'flex';
-            showToast(msg, 'success');
-        }
+        // DOM Elementlerini Güvenli Yakalama ve Event Listener Atama
+        document.addEventListener('DOMContentLoaded', () => {
+            const landingPage = document.getElementById('landing-page');
+            const appDashboard = document.getElementById('app-dashboard');
+            const userHeaderInfo = document.getElementById('user-header-info');
 
-        function goToLanding() {
-            document.getElementById('app-dashboard').style.display = 'none';
-            document.getElementById('user-header-info').style.display = 'none';
-            document.getElementById('landing-page').style.display = 'flex';
-            showToast('Çıkış yapıldı', 'info');
-        }
-
-        function calculateTopup() {
-            const val = document.getElementById('custom-tl-amount').value;
-            const usdtSpan = document.getElementById('usdt-conversion');
-            if(!val || val <= 0) {
-                usdtSpan.innerText = "0.00 USDT (Kur: 34 TL)";
-                return;
+            function goToDashboard(msg) {
+                landingPage.style.display = 'none';
+                appDashboard.style.display = 'block';
+                userHeaderInfo.style.display = 'flex';
+                showToast(msg, 'success');
             }
-            usdtSpan.innerText = `${(val / 34.0).toFixed(2)} USDT (Kur: 34 TL)`;
-        }
 
-        function submitTopupRequest() {
-            const val = document.getElementById('custom-tl-amount').value;
-            if(!val || val <= 0) {
-                showToast('Lütfen geçerli bir tutar girin.', 'error');
-                return;
+            window.goToLanding = function() {
+                appDashboard.style.display = 'none';
+                userHeaderInfo.style.display = 'none';
+                landingPage.style.display = 'flex';
+                showToast('Çıkış yapıldı', 'info');
+            };
+
+            // Butonlara güvenli dinleyiciler ekleniyor
+            document.getElementById('btn-login').addEventListener('click', () => goToDashboard('Giriş Yapıldı'));
+            document.getElementById('btn-register').addEventListener('click', () => goToDashboard('Üye Olundu & Bonus Tanımlandı'));
+            document.getElementById('btn-guest').addEventListener('click', () => goToDashboard('Misafir Oturumu Başlatıldı'));
+
+            const tlInput = document.getElementById('custom-tl-amount');
+            if (tlInput) {
+                tlInput.addEventListener('input', (e) => {
+                    const val = e.target.value;
+                    const usdtSpan = document.getElementById('usdt-conversion');
+                    if (!val || val <= 0) {
+                        usdtSpan.innerText = "0.00 USDT (Kur: 34 TL)";
+                        return;
+                    }
+                    usdtSpan.innerText = `${(val / 34.0).toFixed(2)} USDT (Kur: 34 TL)`;
+                });
             }
-            showToast(`${val} TL bakiye talebi alındı!`, 'success');
-            document.getElementById('custom-tl-amount').value = '';
-        }
 
-        function copyApiKey() {
-            navigator.clipboard.writeText(document.getElementById('api-key-box').value);
-            showToast('API Anahtarı kopyalandı!', 'success');
-        }
+            const submitBtn = document.getElementById('btn-submit-topup');
+            if (submitBtn) {
+                submitBtn.addEventListener('click', () => {
+                    const val = tlInput.value;
+                    if (!val || val <= 0) {
+                        showToast('Lütfen geçerli bir tutar girin.', 'error');
+                        return;
+                    }
+                    showToast(`${val} TL bakiye talebi alındı!`, 'success');
+                    tlInput.value = '';
+                });
+            }
+
+            const copyBtn = document.getElementById('btn-copy');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(document.getElementById('api-key-box').value);
+                    showToast('API Anahtarı kopyalandı!', 'success');
+                });
+            }
+        });
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
+            if (!container) return;
             const toast = document.createElement('div');
             toast.className = `bg-indigo-600 text-white px-4 py-2.5 rounded-xl text-xs shadow-xl`;
             toast.innerText = message;
