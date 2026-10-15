@@ -164,6 +164,57 @@ app.post('/api/credit/buy-with-balance', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// --- KRİPTO CÜZDAN BİLGİLERİ ---
+const CRYPTO_WALLETS = {
+  USDT_TRC20: 'TNWYid6sBqLYmHLsGnqZv2LupXsTfvrkVd',
+  USDT_ERC20: '0x2EF2d6343029e030DB457902F2cAEe249203C7B8'
+};
+
+// Cüzdan adreslerini frontend'e dönen endpoint
+app.get('/api/wallet/crypto-info', (req, res) => {
+  res.json({
+    success: true,
+    wallets: CRYPTO_WALLETS
+  });
+});
+
+// --- KRİPTO ÖDEME BİLDİRİMİ VE BONUSLU BAKİYE YÜKLEME ---
+app.post('/api/wallet/crypto-topup', async (req, res) => {
+  try {
+    const { userId, amountUsd, txHash, network } = req.body; // network: 'TRC20' veya 'ERC20'
+
+    if (!amountUsd || !txHash) {
+      return res.status(400).json({ error: 'Tutar (USD) ve TxHash/İşlem Kodu zorunludur!' });
+    }
+
+    // Seçilen ağa göre doğru cüzdan adresini eşleme
+    const selectedNetwork = (network && network.toUpperCase() === 'ERC20') ? 'ERC20' : 'TRC20';
+    const targetWallet = selectedNetwork === 'ERC20' ? CRYPTO_WALLETS.USDT_ERC20 : CRYPTO_WALLETS.USDT_TRC20;
+
+    // Güncel USDT/TL Kuru (Geliştirme aşamasında sabit, istenirse canlı kur API'sine bağlanabilir)
+    const usdToTryRate = 34.50; 
+    const amountInTry = Number(amountUsd) * usdToTryRate;
+
+    // Kademeli Bonus Hesaplama Motoru
+    const calculation = calculateBonus(amountInTry);
+
+    res.json({
+      success: true,
+      message: 'Kripto ödeme bildirimi alındı! Bakiyeniz kontrol edildikten sonra otomatik tanımlanacaktır.',
+      details: {
+        yatirilanUsd: Number(amountUsd),
+        tlKarsiligi: amountInTry.toFixed(2) + ' TL',
+        kazanilanBonus: calculation.bonusAmount.toFixed(2) + ' TL',
+        toplamCuzdanaYansiyan: calculation.totalBalance.toFixed(2) + ' TL',
+        ag: selectedNetwork,
+        aliciCuzdan: targetWallet,
+        txHash: txHash
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log('Sunucu ' + PORT + ' portunda ayakta!'));
 
