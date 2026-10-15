@@ -110,7 +110,7 @@
                 Hayallerini AI ile Üret,<br class="hidden md:block"/> Yüksek Maliyetlere Takılma.
             </h1>
             <p class="text-slate-400 text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
-                Sora, Runway, Midjourney, Suno ve ChatGPT-4o için aylık abonelik bağlama. API anahtarını üret, harcadığın kadar öde.
+                Sora, Runway, Midjourney, Suno e ChatGPT-4o için aylık abonelik bağlama. API anahtarını üret, harcadığın kadar öde.
             </p>
         </div>
 
@@ -250,4 +250,29 @@
                 </h3>
 
                 <div>
-                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Ödeme
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Ödeme Yöntemi Seçin</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="method-crypto" onclick="setPaymentMethod('crypto')" class="bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2.5 rounded-xl transition">
+                            <i class="fa-solid fa-coins mr-1"></i> Kripto (USDT)
+                        </button>
+                        <button id="method-cc" onclick="setPaymentMethod('cc')" class="bg-studio-900 border border-slate-800 text-slate-400 font-semibold text-xs py-2.5 rounded-xl transition">
+                            <i class="fa-solid fa-credit-card mr-1"></i> Kredi Kartı (İyzico)
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Yüklenecek Tutar (TL)</label>
+                    <p class="text-[11px] text-slate-500 mb-2">0 - 500 TL arası serbest tutar girebilirsiniz (501 TL üzeri bonus katmanına girer).</p>
+                    
+                    <div class="relative flex items-center">
+                        <input type="number" id="custom-tl-amount" oninput="calculateTopup()" placeholder="0 - 500 TL (Serbest Tutar)" min="1" max="50000" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-white font-mono pr-32">
+                        
+                        <div class="absolute right-2">
+                            <button type="button" onclick="toggleCustomDropdown(event)" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold rounded-lg px-3 py-1.5 flex items-center gap-1.5 transition shadow-md">
+                                <span id="dropdown-btn-text">Hızlı Seç</span> <i class="fa-solid fa-chevron-down text-[9px]"></i>
+                            </button>
+
+                            <div id="custom-dropdown-list" class="hidden absolute right-0 mt-2 w-48 bg-[#0c0e14] border border-indigo-500/40 rounded-xl shadow-2xl py-1.5 z-50">
+                                <div onclick="selectCustomAmount(1000, '1,000 TL')" class="px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
+                                    <span>1,000 TL</span> <span class="text-[10px] text-indigo-400 font-semibold">+%
