@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Statik Dosya Sunumu (Tam Yol Belirterek)
+// Statik Dosya Sunumu
 app.use(express.static(path.join(__dirname)));
 
 // Neon PostgreSQL Bağlantı Havuzu
@@ -99,8 +99,8 @@ app.post('/api/wallet/crypto-topup', async (req, res) => {
   }
 });
 
-// 3. Kesin Yönlendirme: index.html dosyasını doğrudan çağırır
-app.get('*', (req, res) => {
+// 3. Kesin Yönlendirme (Regex /.*/ kullanarak path hatası engellendi)
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
