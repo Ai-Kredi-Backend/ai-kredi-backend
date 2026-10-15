@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use(express.static('.'));
 // Neon PostgreSQL bağlantı havuzu
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -44,9 +44,6 @@ async function initDB() {
 
 initDB();
 
-// 1. Ana Sayfa Test Endpoint'i
-app.get('/', (req, res) => {
-  res.send('AI Kredi Backend, Neon DB ve Kripto Altyapisi Aktif!');
 });
 
 // 2. Kullanıcı Kayıt / Getir Endpoint'i
