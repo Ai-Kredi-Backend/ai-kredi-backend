@@ -58,50 +58,35 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .marquee {
-            display: flex;
-            overflow: hidden;
-            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-        }
-        .marquee-content {
-            display: flex;
-            gap: 1.5rem;
-            animation: scroll 30s linear infinite;
-        }
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen font-sans flex flex-col justify-between relative selection:bg-indigo-500 selection:text-white" onclick="closeCustomDropdown(event)">
+<body class="text-slate-100 min-h-screen font-sans flex flex-col justify-between relative selection:bg-indigo-500 selection:text-white">
 
     <canvas id="space-canvas"></canvas>
     <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3"></div>
 
     <!-- Header -->
     <header class="studio-card sticky top-0 z-40 px-6 py-4 flex justify-between items-center border-b border-slate-800/80">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="showLanding()">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="goToLanding()">
             <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                 <i class="fa-solid fa-sparkles text-white text-base"></i>
             </div>
             <span class="text-lg font-bold tracking-wider text-white">AI CREDIT <span class="text-indigo-400 font-normal">HUB</span></span>
         </div>
 
-        <div id="user-header-info" class="hidden items-center gap-4">
+        <div id="user-header-info" style="display: none;" class="items-center gap-4">
             <div class="bg-studio-900 border border-slate-800 px-4 py-2 rounded-xl text-xs font-mono">
                 <span class="text-slate-400">Bakiye:</span> 
                 <span id="user-balance" class="font-bold text-emerald-400 ml-1">0.00 TL</span>
             </div>
-            <button onclick="logout()" class="text-slate-400 hover:text-rose-400 text-xs transition">
+            <button onclick="goToLanding()" class="text-slate-400 hover:text-rose-400 text-xs transition">
                 <i class="fa-solid fa-right-from-bracket mr-1"></i> Çıkış
             </button>
         </div>
     </header>
 
-    <!-- ==================== LANDING PAGE ==================== -->
-    <main id="landing-page" class="container mx-auto px-4 py-8 max-w-5xl flex-1 flex flex-col justify-center relative z-10">
-        
+    <!-- ==================== 1. LANDING PAGE ==================== -->
+    <div id="landing-page" style="display: flex;" class="container mx-auto px-4 py-8 max-w-5xl flex-1 flex-col justify-center relative z-10">
         <div class="text-center space-y-3 mb-6">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full studio-card border border-indigo-500/30 text-indigo-300 text-xs font-medium tracking-wide">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sınırsız AI Üretim Gücü — API Entegrasyonlu
@@ -115,38 +100,17 @@
         </div>
 
         <div class="studio-card p-6 md:p-8 rounded-3xl mb-6 border border-indigo-500/40 relative overflow-hidden shadow-2xl">
-            
-            <div id="prompt-header-banner" class="mb-6 p-4 rounded-2xl bg-studio-900 border border-indigo-500/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                <div class="space-y-1">
-                    <span id="prompt-tag" class="text-indigo-400 font-mono text-xs flex items-center gap-2">
-                        <i class="fa-solid fa-bug"></i> Makro & Video Üretimi
-                    </span>
-                    <h2 id="prompt-title" class="text-base font-bold text-white">
-                        Böcek & Doğa Videosu Serisi mi Yapmak İstiyorsun?
-                    </h2>
-                </div>
-                <div class="font-mono text-[11px] text-slate-300 bg-black/60 px-3 py-1.5 rounded-lg border border-slate-800 self-stretch md:self-auto flex items-center gap-2">
-                    <span class="text-indigo-400">❯</span> <span id="prompt-code">/generate_video --style macro --8k</span>
-                </div>
-            </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Doğrudan Dashboard'a Ulaştıran Akış -->
-                <div onclick="showDashboard('Giriş Yapıldı')" class="studio-card-interactive p-5 rounded-2xl cursor-pointer group">
-                    <div class="flex justify-between items-center mb-3">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-base group-hover:bg-indigo-600 group-hover:text-white transition">
-                            <i class="fa-solid fa-right-to-bracket"></i>
-                        </div>
-                        <i class="fa-solid fa-arrow-right text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-1 transition text-xs"></i>
+                <div onclick="goToDashboard('Giriş Yapıldı')" class="studio-card-interactive p-5 rounded-2xl cursor-pointer group">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-base mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-right-to-bracket"></i>
                     </div>
                     <h3 class="text-sm font-bold text-white mb-1">Giriş Yap</h3>
                     <p class="text-slate-400 text-xs leading-relaxed">Mevcut hesabınla bağlan, API anahtarını yönet.</p>
                 </div>
 
-                <div onclick="showDashboard('Üye Olundu & Bonus Tanımlandı')" class="studio-card-interactive p-5 rounded-2xl border border-indigo-500/40 relative cursor-pointer group">
-                    <span class="absolute top-2.5 right-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md">
-                        +%12.5 BONUS
-                    </span>
+                <div onclick="goToDashboard('Üye Olundu & Bonus Tanımlandı')" class="studio-card-interactive p-5 rounded-2xl border border-indigo-500/40 relative cursor-pointer group">
+                    <span class="absolute top-2.5 right-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md">+%12.5 BONUS</span>
                     <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-base mb-3 group-hover:bg-purple-600 group-hover:text-white transition">
                         <i class="fa-solid fa-user-plus"></i>
                     </div>
@@ -154,46 +118,19 @@
                     <p class="text-slate-400 text-xs leading-relaxed">Hesap aç, katmanlı bakiye yüklemelerinde bonus kazan.</p>
                 </div>
 
-                <div onclick="showDashboard('Misafir Oturumu Başlatıldı')" class="studio-card-interactive p-5 rounded-2xl border border-emerald-500/30 cursor-pointer group">
-                    <div class="flex justify-between items-center mb-3">
-                        <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base group-hover:bg-emerald-600 group-hover:text-white transition">
-                            <i class="fa-solid fa-bolt-lightning"></i>
-                        </div>
-                        <i class="fa-solid fa-arrow-right text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition text-xs"></i>
+                <div onclick="goToDashboard('Misafir Oturumu Başlatıldı')" class="studio-card-interactive p-5 rounded-2xl border border-emerald-500/30 cursor-pointer group">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base mb-3 group-hover:bg-emerald-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-bolt-lightning"></i>
                     </div>
                     <h3 class="text-sm font-bold text-white mb-1">Üye Olmadan Hızlı Al</h3>
                     <p class="text-slate-400 text-xs leading-relaxed">Sadece e-posta gir, anında API anahtarı al ve başla.</p>
                 </div>
             </div>
-
-            <div class="flex justify-between items-center mt-6 pt-4 border-t border-slate-800">
-                <span class="text-xs text-slate-400 flex items-center gap-1.5">
-                    <i class="fa-solid fa-bolt text-yellow-400"></i> Anında API Üretimi & Esnek Bakiye
-                </span>
-                <div class="flex gap-2" id="carousel-dots">
-                    <button onclick="setSlide(0)" class="w-2.5 h-2.5 rounded-full bg-indigo-500 transition-all"></button>
-                    <button onclick="setSlide(1)" class="w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></button>
-                    <button onclick="setSlide(2)" class="w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></button>
-                </div>
-            </div>
         </div>
+    </div>
 
-        <div class="marquee py-3 studio-card rounded-xl border border-slate-800">
-            <div class="marquee-content text-xs text-slate-300">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-bug text-amber-400"></i> Makro Böcek Belgeseli AI Videoları</span>
-                <span class="text-slate-600">•</span>
-                <span class="flex items-center gap-2"><i class="fa-solid fa-music text-purple-400"></i> Suno & Udio Tam Albüm Üretimi</span>
-                <span class="text-slate-600">•</span>
-                <span class="flex items-center gap-2"><i class="fa-solid fa-code text-indigo-400"></i> ChatGPT-4o & Claude 3.5 API Bağlantısı</span>
-                <span class="text-slate-600">•</span>
-                <span class="flex items-center gap-2"><i class="fa-solid fa-film text-cyan-400"></i> Midjourney & Sora Sinematik Çıktılar</span>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- ==================== UYGULAMA İÇİ DASHBOARD & API YÖNETİMİ ==================== -->
-    <main id="app-dashboard" class="container mx-auto px-4 py-8 max-w-6xl hidden flex-1 relative z-10">
+    <!-- ==================== 2. APP DASHBOARD ==================== -->
+    <div id="app-dashboard" style="display: none;" class="container mx-auto px-4 py-8 max-w-6xl flex-1 relative z-10">
         
         <div class="studio-card p-6 rounded-2xl mb-8 border border-indigo-500/30">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -208,21 +145,94 @@
                     <button onclick="copyApiKey()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl transition whitespace-nowrap">
                         <i class="fa-solid fa-copy mr-1"></i> Kopyala
                     </button>
-                    <button onclick="generateApiKey()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3 py-2 rounded-xl transition" title="Yeni Anahtar Üret">
-                        <i class="fa-solid fa-rotate"></i>
-                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="studio-card p-6 rounded-2xl mb-8">
-            <h3 class="text-base font-bold mb-4 flex items-center gap-2 text-white">
-                <i class="fa-solid fa-gift text-indigo-400"></i> Katmanlı Bakiye Bonus Fırsatları
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <div class="bg-studio-900 border border-slate-800 p-3 rounded-xl text-center">
-                    <div class="text-[11px] text-slate-400">0 - 500 TL</div>
-                    <div class="font-bold text-slate-200 text-sm mt-1">%0 Bonus (Free Hak)</div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="studio-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-base font-bold flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-wallet text-emerald-400"></i> Esnek Bakiye Yükle
+                </h3>
+                <div>
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Yüklenecek Tutar (TL)</label>
+                    <p class="text-[11px] text-slate-500 mb-2">0 - 500 TL arası serbest tutar girebilirsiniz (501 TL üzeri bonus katmanına girer).</p>
+                    <input type="number" id="custom-tl-amount" oninput="calculateTopup()" placeholder="0 - 500 TL (Serbest Tutar)" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-white font-mono">
                 </div>
-                <div class="bg-studio-900 border border-indigo-500/30 p-3 rounded-xl text-center">
-                    <div class="text-[11px] text-slate-400">1,00
+                <div class="flex justify-between items-center bg-studio-900 p-3 rounded-xl border border-slate-800 text-xs font-mono">
+                    <span class="text-slate-400">Ödenecek USDT Karşılığı:</span>
+                    <span id="usdt-conversion" class="text-emerald-400 font-bold">0.00 USDT (Kur: 34 TL)</span>
+                </div>
+                <button onclick="submitTopupRequest()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition text-xs shadow-lg">
+                    Ödeme Bildirimi Gönder
+                </button>
+            </div>
+
+            <div class="studio-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-base font-bold flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-terminal text-indigo-400"></i> Hızlı API Entegrasyon Örneği
+                </h3>
+                <div class="bg-black/80 border border-slate-800 p-4 rounded-xl font-mono text-[11px] text-indigo-300 overflow-x-auto space-y-1">
+                    <div>curl -X POST https://aikredibackend.online/v1/generate \</div>
+                    <div class="pl-4">-H "Authorization: Bearer <span class="text-emerald-400">ai_live_...</span>"</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-slate-900 py-6 text-center text-xs text-slate-600 relative z-10">
+        AI Credit Hub &copy; 2026 — Next-Generation AI Studio
+    </footer>
+
+    <script>
+        // Kesin Geçiş Fonksiyonları (Inline style kullanarak display flex/none çakışmalarını sıfırlıyoruz)
+        function goToDashboard(msg) {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('app-dashboard').style.display = 'block';
+            document.getElementById('user-header-info').style.display = 'flex';
+            showToast(msg, 'success');
+        }
+
+        function goToLanding() {
+            document.getElementById('app-dashboard').style.display = 'none';
+            document.getElementById('user-header-info').style.display = 'none';
+            document.getElementById('landing-page').style.display = 'flex';
+            showToast('Çıkış yapıldı', 'info');
+        }
+
+        function calculateTopup() {
+            const val = document.getElementById('custom-tl-amount').value;
+            const usdtSpan = document.getElementById('usdt-conversion');
+            if(!val || val <= 0) {
+                usdtSpan.innerText = "0.00 USDT (Kur: 34 TL)";
+                return;
+            }
+            usdtSpan.innerText = `${(val / 34.0).toFixed(2)} USDT (Kur: 34 TL)`;
+        }
+
+        function submitTopupRequest() {
+            const val = document.getElementById('custom-tl-amount').value;
+            if(!val || val <= 0) {
+                showToast('Lütfen geçerli bir tutar girin.', 'error');
+                return;
+            }
+            showToast(`${val} TL bakiye talebi alındı!`, 'success');
+            document.getElementById('custom-tl-amount').value = '';
+        }
+
+        function copyApiKey() {
+            navigator.clipboard.writeText(document.getElementById('api-key-box').value);
+            showToast('API Anahtarı kopyalandı!', 'success');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `bg-indigo-600 text-white px-4 py-2.5 rounded-xl text-xs shadow-xl`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
