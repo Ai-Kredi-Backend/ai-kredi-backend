@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Credit Hub - Sınırsız AI Gücü</title>
+    <title>AI Credit Hub — Next-Gen AI Generation Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -11,9 +11,13 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            500: '#6366f1',
-                            600: '#4f46e5',
+                        studio: {
+                            950: '#06070B',
+                            900: '#0C0E14',
+                            800: '#151821',
+                            700: '#222736',
+                            accent: '#6366f1',
+                            cyan: '#06b6d4',
                         }
                     }
                 }
@@ -22,395 +26,108 @@
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Runway / Sora Stil Canlı Hareketli Arka Plan */
-        .animated-bg {
-            background: linear-gradient(-45deg, #090d16, #111827, #1e1b4b, #311042);
-            background-size: 400% 400%;
-            animation: gradientMove 12s ease infinite;
+        /* Seedance / BytePlus Mesh Background */
+        body {
+            background-color: #06070B;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
         }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Glassmorphism Studio Cards */
+        .studio-card {
+            background: rgba(18, 21, 31, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
         }
 
-        /* Işıldayan Neon Cam Efekti (Glassmorphism) */
-        .glass-card {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .glass-card:hover {
+        .studio-card:hover {
             border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
         }
 
-        /* Kesintisiz Kayan Galeri Bandı (Marquee) */
-        .marquee-container {
+        /* Glow Text Gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Marquee Scroll */
+        .marquee {
             display: flex;
             overflow: hidden;
-            user-select: none;
-            gap: 1rem;
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
         }
 
         .marquee-content {
-            flex-shrink: 0;
             display: flex;
-            justify-content: space-around;
-            gap: 1rem;
-            min-width: 100%;
-            animation: scroll 25s linear infinite;
+            gap: 1.5rem;
+            animation: scroll 30s linear infinite;
         }
 
         @keyframes scroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(-100%); }
-        }
-
-        /* Pulsing Glow Orbs */
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.35;
-            animation: pulseGlow 8s ease-in-out infinite alternate;
-            pointer-events: none;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.25; }
-            100% { transform: scale(1.3) translate(30px, -20px); opacity: 0.45; }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
     </style>
 </head>
-<body class="animated-bg text-slate-100 min-h-screen font-sans flex flex-col justify-between relative overflow-x-hidden">
-
-    <!-- Işık Küreleri (Glow Orbs) -->
-    <div class="glow-orb w-96 h-96 bg-indigo-600 top-10 -left-20"></div>
-    <div class="glow-orb w-96 h-96 bg-purple-600 bottom-10 -right-20"></div>
-    <div class="glow-orb w-80 h-80 bg-amber-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+<body class="text-slate-100 min-h-screen font-sans flex flex-col justify-between relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
 
     <!-- Toast Bildirim Kabuğu -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3"></div>
 
-    <!-- Üst Header Bar -->
-    <header class="glass-card sticky top-0 z-40 px-6 py-4 flex justify-between items-center border-b border-slate-800/80">
+    <!-- Header Navigation Bar (Seedance Style) -->
+    <header class="studio-card sticky top-0 z-40 px-6 py-4 flex justify-between items-center border-b border-slate-800/60">
         <div class="flex items-center gap-3 cursor-pointer" onclick="showLanding()">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                <i class="fa-solid fa-bolt text-yellow-300 text-xl animate-pulse"></i>
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <i class="fa-solid fa-sparkles text-white text-base"></i>
             </div>
-            <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">AI Credit <span class="text-indigo-400">Hub</span></span>
+            <span class="text-lg font-bold tracking-wider text-white">AI CREDIT <span class="text-indigo-400 font-normal">HUB</span></span>
         </div>
 
         <div id="user-header-info" class="hidden items-center gap-4">
-            <div class="bg-slate-900/80 border border-slate-800 px-4 py-2 rounded-xl text-sm">
+            <div class="bg-studio-900 border border-slate-800 px-4 py-2 rounded-xl text-xs font-mono">
                 <span class="text-slate-400">Bakiye:</span> 
                 <span id="user-balance" class="font-bold text-emerald-400 ml-1">0.00 TL</span>
             </div>
-            <button onclick="logout()" class="text-slate-400 hover:text-rose-400 text-sm transition">
+            <button onclick="logout()" class="text-slate-400 hover:text-rose-400 text-xs transition">
                 <i class="fa-solid fa-right-from-bracket mr-1"></i> Çıkış
             </button>
         </div>
     </header>
 
-    <!-- ==================== LANDING PAGE (HAREKETLİ AI VİDEO STİLİ) ==================== -->
-    <main id="landing-page" class="container mx-auto px-4 py-8 max-w-6xl flex-1 flex flex-col justify-center relative z-10">
+    <!-- ==================== LANDING PAGE (SEEDANCE / BYTEPLUS STYLE) ==================== -->
+    <main id="landing-page" class="container mx-auto px-4 py-12 max-w-5xl flex-1 flex flex-col justify-center relative z-10">
         
-        <!-- Üst Kayan AI İçerik Bandı (Runway/Sora Marquee) -->
-        <div class="marquee-container mb-10 py-2">
-            <div class="marquee-content">
-                <div class="px-4 py-2 rounded-full glass-card text-xs flex items-center gap-2 border border-amber-500/30 text-amber-300">
-                    <i class="fa-solid fa-bug"></i> Makro Böcek Belgeseli AI Videoları
-                </div>
-                <div class="px-4 py-2 rounded-full glass-card text-xs flex items-center gap-2 border border-purple-500/30 text-purple-300">
-                    <i class="fa-solid fa-music"></i> Suno & Udio Tam Boyutlu Albümler
-                </div>
-                <div class="px-4 py-2 rounded-full glass-card text-xs flex items-center gap-2 border border-indigo-500/30 text-indigo-300">
-                    <i class="fa-solid fa-code"></i> ChatGPT-4o & Claude 3.5 Sonnet Entegrasyonu
-                </div>
-                <div class="px-4 py-2 rounded-full glass-card text-xs flex items-center gap-2 border border-emerald-500/30 text-emerald-300">
-                    <i class="fa-solid fa-film"></i> Midjourney & Sora Yüksek Çözünürlüklü Kareler
-                </div>
+        <!-- Hero Tagline -->
+        <div class="text-center space-y-4 mb-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full studio-card border border-indigo-500/30 text-indigo-300 text-xs font-medium tracking-wide">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sınırsız AI Üretim Gücü — API Entegrasyonlu
             </div>
-            <div class="marquee-content" aria-hidden="true">
-                <div class="px-4 py-2 rounded-full glass-card text-xs flex items-center gap-2 border border-amber-500/30 text-amber-300">
-                    <i class="fa-solid fa-bug"></i> Makro Böcek Belgeseli AI Videoları
-                </div>
-                <div class="px-4 py-2 rounded-full glass-card text-xs flex items-center gap-2 border border-purple-500/30 text-purple-300">
-                    <i class="fa-solid fa-music"></i> Suno & Udio Tam Boyutlu Albümler
-                </div>
-                <div class="px-4 py-2 rounded-full glass-card text-xs flex items-center gap-2 border border-indigo-500/30 text-indigo-300">
-                    <i class="fa-solid fa-code"></i> ChatGPT-4o & Claude 3.5 Sonnet Entegrasyonu
-                </div>
-                <div class="px-4 py-2 rounded-full glass-card text-xs flex items-center gap-2 border border-emerald-500/30 text-emerald-300">
-                    <i class="fa-solid fa-film"></i> Midjourney & Sora Yüksek Çözünürlüklü Kareler
-                </div>
-            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-gradient leading-tight">
+                Hayallerini AI ile Üret,<br class="hidden md:block"/> Yüksek Maliyetlere Takılma.
+            </h1>
+            <p class="text-slate-400 text-base max-w-2xl mx-auto leading-relaxed">
+                Sora, Runway, Midjourney, Suno ve ChatGPT-4o için aylık yüksek abonelikler ödeme. Yalnızca harcadığın kadar ucuz bakiye yükle ve anında üretmeye başla.
+            </p>
         </div>
 
-        <!-- Dönen Reklam / Senaryo Carousel (Hero Slider) -->
-        <div class="relative overflow-hidden rounded-3xl glass-card p-8 md:p-10 mb-12 border border-indigo-500/30 transition-all">
-            <div id="carousel-track">
-                <!-- Javascript dinamik yükleyecek -->
-            </div>
-
-            <!-- Carousel İndikatörleri -->
-            <div class="flex justify-center gap-2 mt-8" id="carousel-dots">
-                <button onclick="setSlide(0)" class="w-3 h-3 rounded-full bg-indigo-500 transition-all"></button>
-                <button onclick="setSlide(1)" class="w-3 h-3 rounded-full bg-slate-700 transition-all"></button>
-                <button onclick="setSlide(2)" class="w-3 h-3 rounded-full bg-slate-700 transition-all"></button>
-            </div>
-        </div>
-
-        <!-- Seçenek Kartları (Giriş / Kayıt / Misafir) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Interactive Dynamic AI Prompt / Scenario Carousel Box -->
+        <div class="studio-card p-6 md:p-8 rounded-3xl mb-12 border border-indigo-500/20 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
             
-            <!-- Kart 1: Giriş Yap -->
-            <div onclick="showAuthModal('login')" class="glass-card p-6 rounded-2xl transition cursor-pointer group hover:-translate-y-1">
-                <div class="w-12 h-12 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center mb-4 text-xl group-hover:bg-indigo-600 group-hover:text-white transition">
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Giriş Yap</h3>
-                <p class="text-slate-400 text-sm mb-4">Mevcut hesabına gir, mevcut bakiyenle jeton/kredi almaya hemen devam et.</p>
-                <span class="text-indigo-400 font-medium text-sm flex items-center gap-2 group-hover:translate-x-1 transition">
-                    Giriş Ekranı <i class="fa-solid fa-arrow-right text-xs"></i>
+            <div id="carousel-track" class="min-h-[160px] flex items-center">
+                <!-- Javascript Otomatik Yükleyecek -->
+            </div>
+
+            <div class="flex justify-between items-center mt-6 pt-4 border-t border-slate-800/80">
+                <span class="text-xs text-slate-500 flex items-center gap-1.5">
+                    <i class="fa-solid fa-bolt text-yellow-400"></i> Anında Teslimat & Esnek Bakiye
                 </span>
-            </div>
-
-            <!-- Kart 2: Üye Ol (Bonus Fırsatı) -->
-            <div onclick="showAuthModal('register')" class="glass-card p-6 rounded-2xl border border-indigo-500/40 relative overflow-hidden transition cursor-pointer group hover:-translate-y-1">
-                <div class="absolute -top-3 -right-3 bg-gradient-to-l from-indigo-500 to-purple-500 text-white text-[10px] font-bold px-4 py-2 rounded-bl-xl shadow-lg">
-                    +%12.5 BONUS
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center mb-4 text-xl group-hover:bg-purple-600 group-hover:text-white transition">
-                    <i class="fa-solid fa-user-plus"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Üye Ol</h3>
-                <p class="text-slate-400 text-sm mb-4">Hesap oluştur, yüksek bakiye yüklemelerinde katmanlı %12.5 bonus bakiyeler kazan!</p>
-                <span class="text-purple-400 font-medium text-sm flex items-center gap-2 group-hover:translate-x-1 transition">
-                    Hesap Oluştur <i class="fa-solid fa-arrow-right text-xs"></i>
-                </span>
-            </div>
-
-            <!-- Kart 3: Üye Olmadan Tek Seferlik Hızlı Al -->
-            <div onclick="enterAsGuest()" class="glass-card p-6 rounded-2xl border border-emerald-500/30 transition cursor-pointer group hover:-translate-y-1">
-                <div class="w-12 h-12 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center mb-4 text-xl group-hover:bg-emerald-600 group-hover:text-white transition">
-                    <i class="fa-solid fa-bolt-lightning"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Üye Olmadan Hızlı Al</h3>
-                <p class="text-slate-400 text-sm mb-4">Kayıt işlemleriyle uğraşma. Tek e-posta ile anında sipariş ver ve kredini al.</p>
-                <span class="text-emerald-400 font-medium text-sm flex items-center gap-2 group-hover:translate-x-1 transition">
-                    Hızlı Alışverişe Başla <i class="fa-solid fa-arrow-right text-xs"></i>
-                </span>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- ==================== UYGULAMA İÇİ MARKET & BAKİYE EKRANI ==================== -->
-    <main id="app-dashboard" class="container mx-auto px-4 py-8 max-w-6xl hidden flex-1 relative z-10">
-        
-        <!-- Bakiye Yükleme Bonus Fırsatları -->
-        <div class="glass-card p-6 rounded-2xl mb-8">
-            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-gift text-indigo-400"></i> Bakiye Yükleme Bonus Fırsatları
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl text-center">
-                    <div class="text-xs text-slate-400">0 - 500 TL</div>
-                    <div class="font-bold text-slate-200 mt-1">%0 Bonus</div>
-                </div>
-                <div class="bg-slate-900/80 border border-indigo-500/30 p-3 rounded-xl text-center">
-                    <div class="text-xs text-slate-400">1,000 TL</div>
-                    <div class="font-bold text-indigo-400 mt-1">+%5 Bonus</div>
-                </div>
-                <div class="bg-slate-900/80 border border-indigo-500/30 p-3 rounded-xl text-center">
-                    <div class="text-xs text-slate-400">2,500 TL</div>
-                    <div class="font-bold text-indigo-400 mt-1">+%8 Bonus</div>
-                </div>
-                <div class="bg-slate-900/80 border border-indigo-500/30 p-3 rounded-xl text-center">
-                    <div class="text-xs text-slate-400">5,000 TL</div>
-                    <div class="font-bold text-indigo-400 mt-1">+%10 Bonus</div>
-                </div>
-                <div class="bg-slate-900/80 border border-purple-500/40 p-3 rounded-xl text-center col-span-2 md:col-span-1">
-                    <div class="text-xs text-slate-400">10,000 TL+</div>
-                    <div class="font-bold text-purple-400 mt-1">+%12.5 Bonus</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- AI Kredi & Jeton Paketleri -->
-            <div class="lg:col-span-2 space-y-6">
-                <h3 class="text-xl font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-store text-indigo-400"></i> AI Kredi & Jeton Paketleri
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Paket 1 -->
-                    <div class="glass-card p-5 rounded-xl space-y-4">
-                        <div class="flex justify-between items-start">
-                            <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-2.5 py-1 rounded-md">Başlangıç</span>
-                            <span class="text-xs text-slate-500">Stokta Var</span>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold">1,000 AI Kredisi</h4>
-                            <p class="text-xs text-slate-400 mt-1">GPT-4o / Claude 3.5 sorguları için geçerli paket.</p>
-                        </div>
-                        <div class="flex justify-between items-center pt-2">
-                            <span class="text-2xl font-black text-slate-100">150 TL</span>
-                            <button onclick="buyCreditPackage('1000 AI Kredisi', 150)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-lg transition shadow-lg shadow-indigo-600/30">
-                                Satın Al
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Paket 2 -->
-                    <div class="glass-card p-5 rounded-xl border border-purple-500/40 relative space-y-4">
-                        <span class="absolute -top-2.5 right-4 bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase shadow-md">Çok Satan</span>
-                        <div class="flex justify-between items-start">
-                            <span class="bg-purple-500/10 text-purple-400 text-xs font-semibold px-2.5 py-1 rounded-md">Pro Paket</span>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold">5,000 AI Kredisi</h4>
-                            <p class="text-xs text-slate-400 mt-1">Ağır metin ve görsel oluşturma istekleri için ideal.</p>
-                        </div>
-                        <div class="flex justify-between items-center pt-2">
-                            <div>
-                                <span class="text-2xl font-black text-slate-100">650 TL</span>
-                                <span class="text-xs text-slate-500 line-through ml-1">750 TL</span>
-                            </div>
-                            <button onclick="buyCreditPackage('5000 AI Kredisi', 650)" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-lg transition shadow-lg shadow-purple-600/30">
-                                Satın Al
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bakiye Yükleme (Kripto TRC-20) -->
-            <div class="space-y-6">
-                <h3 class="text-xl font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-wallet text-emerald-400"></i> Bakiye Yükle (Kripto)
-                </h3>
-                
-                <div class="glass-card p-5 rounded-2xl space-y-4">
-                    <div>
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Ağ Seçin (USDT)</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button class="bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2 rounded-lg">USDT (TRC-20)</button>
-                            <button class="bg-slate-900 border border-slate-800 text-slate-500 font-semibold text-xs py-2 rounded-lg opacity-50 cursor-not-allowed">USDT (ERC-20)</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Transfer Edilecek Cüzdan Adresi:</label>
-                        <div class="bg-slate-900/90 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
-                            <span class="text-xs font-mono text-slate-300 truncate mr-2" id="wallet-address">TNWyId6sBqLYmHLsGnqZv2LupXsTfvrkVd</span>
-                            <button onclick="copyWallet()" class="text-indigo-400 hover:text-indigo-300 text-xs font-semibold px-2 py-1 bg-indigo-500/10 rounded-md transition">Kopyala</button>
-                        </div>
-                    </div>
-
-                    <div class="pt-2 border-t border-slate-800 space-y-3">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Ödeme Onayı Bildir</label>
-                        <input type="number" id="usdt-amount" placeholder="Gönderdiğiniz USDT Miktarı" class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500">
-                        <button onclick="submitTopup()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-emerald-600/30">
-                            Ödeme Yaptım, Bakiyemi Yükle
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- Modal (Giriş / Kayıt / Misafir) -->
-    <div id="auth-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-md w-full p-6 rounded-2xl relative">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            
-            <h3 id="modal-title" class="text-2xl font-bold mb-4">Giriş Yap</h3>
-            
-            <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-                <div id="email-field">
-                    <label class="text-xs font-semibold text-slate-400 block mb-1">E-Posta Adresiniz</label>
-                    <input type="email" id="auth-email" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500" placeholder="ornek@mail.com">
-                </div>
-                
-                <div id="password-field">
-                    <label class="text-xs font-semibold text-slate-400 block mb-1">Şifre</label>
-                    <input type="password" id="auth-password" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500" placeholder="••••••••">
-                </div>
-
-                <button type="submit" id="auth-submit-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-indigo-600/30">
-                    Devam Et
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-900/80 py-6 text-center text-xs text-slate-500 relative z-10">
-        AI Credit Hub &copy; 2026 - Tüm Hakları Saklıdır.
-    </footer>
-
-    <script>
-        // Slides Verileri (Karşılama Ekranı Dönen Reklamlar)
-        const slides = [
-            {
-                tag: "Makro & Video Üretimi",
-                icon: "fa-bug",
-                color: "amber",
-                title: "Böcek & Doğa Videosu Serisi mi Yapmak İstiyorsun?",
-                desc: "Sora, Runway ve Pika abonelikleri çok mu pahalı tutuyor? AI Credit Hub ile abonelik bağlamadan, doğrudan kullandığın kadar kredi yükle, %50'ye varan indirimle serini üret!",
-                boxText: "Makro Detaylar, Sıfır Abonelik İşkencesi"
-            },
-            {
-                tag: "Müzik & Ses Stüdyosu",
-                icon: "fa-music",
-                color: "purple",
-                title: "Müzik Uygulamaları Güzel Ama Krediler Çok mu Pahalı?",
-                desc: "Suno ve Udio'da albüm yaparken kredilerin hemen tükeniyor mu? Aylık pahalı paketlere mahkum olma, AI Credit Hub ile en ucuz jetonlarla albümünü tamamla!",
-                boxText: "Sınırsız Beste, Bütçe Dostu Jetonlar"
-            },
-            {
-                tag: "Kod & Metin Asistanı",
-                icon: "fa-code",
-                color: "indigo",
-                title: "ChatGPT-4o & Claude 3.5 Limitlerine mi Takıldın?",
-                desc: "Her model için ayrı ayrı $20-$30 ödemene gerek yok! Tek tıkla bakiye yükle, API entegrasyonlu altyapımızla tüm modellere kesintisiz eriş.",
-                boxText: "Tek Bakiye ile Tüm AI Modelleri"
-            }
-        ];
-
-        let currentSlide = 0;
-        let currentUser = null;
-
-        function setSlide(index) {
-            currentSlide = index;
-            const data = slides[index];
-            const track = document.getElementById('carousel-track');
-            
-            track.innerHTML = `
-                <div class="slide flex flex-col md:flex-row items-center justify-between gap-8 transition-all duration-500">
-                    <div class="space-y-4 max-w-xl">
-                        <span class="px-3 py-1 bg-${data.color}-500/10 border border-${data.color}-500/30 text-${data.color}-400 text-xs font-semibold rounded-full uppercase tracking-wider inline-flex items-center gap-1.5">
-                            <i class="fa-solid ${data.icon}"></i> ${data.tag}
-                        </span>
-                        <h1 class="text-3xl md:text-4xl font-extrabold leading-tight tracking-tight">
-                            ${data.title}
-                        </h1>
-                        <p class="text-slate-300 text-base leading-relaxed">
-                            ${data.desc}
-                        </p>
-                    </div>
-                    <div class="w-full md:w-72 h-48 rounded-2xl bg-gradient-to-br from-${data.color}-500/20 to-indigo-600/30 border border-${data.color}-500/30 flex flex-col items-center justify-center text-center p-6 shadow-xl">
-                        <i class="fa-solid ${data.icon} text-5xl
+                <div class="flex gap-2" id="carousel-dots">
+                    <button onclick="setSlide(0)" class="w-2.5 h-2.5 rounded-full bg-indigo-500 transition-all"></button>
+                    <button onclick="setSlide(1)" class="w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></
