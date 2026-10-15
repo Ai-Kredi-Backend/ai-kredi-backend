@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Credit Hub — Next-Gen AI Generation Studio</title>
+    <title>AI Credit Hub — API & Token Management Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -114,7 +114,7 @@
                 Hayallerini AI ile Üret,<br class="hidden md:block"/> Yüksek Maliyetlere Takılma.
             </h1>
             <p class="text-slate-400 text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
-                Sora, Runway, Midjourney, Suno ve ChatGPT-4o için aylık abonelik bağlama. Yalnızca harcadığın kadar ucuz bakiye yükle.
+                Sora, Runway, Midjourney, Suno ve ChatGPT-4o için aylık abonelik bağlama. API anahtarını üret, harcadığın kadar öde.
             </p>
         </div>
 
@@ -139,7 +139,6 @@
             <!-- Ortadaki 3 Giriş Kutusu -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 
-                <!-- Kutucuk 1: Giriş Yap -->
                 <div onclick="showAuthModal('login')" class="studio-card-interactive p-5 rounded-2xl cursor-pointer group">
                     <div class="flex justify-between items-center mb-3">
                         <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-base group-hover:bg-indigo-600 group-hover:text-white transition">
@@ -148,10 +147,9 @@
                         <i class="fa-solid fa-arrow-right text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-1 transition text-xs"></i>
                     </div>
                     <h3 class="text-sm font-bold text-white mb-1">Giriş Yap</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">Mevcut hesabınla bağlan, bakiyeni hemen kullan.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">Mevcut hesabınla bağlan, API anahtarını yönet.</p>
                 </div>
 
-                <!-- Kutucuk 2: Üye Ol -->
                 <div onclick="showAuthModal('register')" class="studio-card-interactive p-5 rounded-2xl border border-indigo-500/40 relative cursor-pointer group">
                     <span class="absolute top-2.5 right-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md">
                         +%12.5 BONUS
@@ -163,7 +161,6 @@
                     <p class="text-slate-400 text-xs leading-relaxed">Hesap aç, katmanlı bakiye yüklemelerinde bonus kazan.</p>
                 </div>
 
-                <!-- Kutucuk 3: Üye Olmadan Hızlı Al -->
                 <div onclick="enterAsGuest()" class="studio-card-interactive p-5 rounded-2xl border border-emerald-500/30 cursor-pointer group">
                     <div class="flex justify-between items-center mb-3">
                         <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base group-hover:bg-emerald-600 group-hover:text-white transition">
@@ -172,15 +169,14 @@
                         <i class="fa-solid fa-arrow-right text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition text-xs"></i>
                     </div>
                     <h3 class="text-sm font-bold text-white mb-1">Üye Olmadan Hızlı Al</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">Sadece e-posta gir, anında sipariş oluştur ve başla.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">Sadece e-posta gir, anında API anahtarı al ve başla.</p>
                 </div>
 
             </div>
 
-            <!-- Footer Dots -->
             <div class="flex justify-between items-center mt-6 pt-4 border-t border-slate-800">
                 <span class="text-xs text-slate-400 flex items-center gap-1.5">
-                    <i class="fa-solid fa-bolt text-yellow-400"></i> Anında Teslimat & Esnek Bakiye
+                    <i class="fa-solid fa-bolt text-yellow-400"></i> Anında API Üretimi & Esnek Bakiye
                 </span>
                 <div class="flex gap-2" id="carousel-dots">
                     <button onclick="setSlide(0)" class="w-2.5 h-2.5 rounded-full bg-indigo-500 transition-all"></button>
@@ -205,17 +201,39 @@
 
     </main>
 
-    <!-- ==================== UYGULAMA İÇİ MARKET & BAKİYE EKRANI ==================== -->
+    <!-- ==================== UYGULAMA İÇİ DASHBOARD & API YÖNETİMİ ==================== -->
     <main id="app-dashboard" class="container mx-auto px-4 py-8 max-w-6xl hidden flex-1 relative z-10">
         
+        <!-- API Anahtar Yönetim Paneli -->
+        <div class="studio-card p-6 rounded-2xl mb-8 border border-indigo-500/30">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-key text-indigo-400"></i> AI Hub API Anahtarınız
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Sora, Claude ve GPT entegrasyonlarınız için gizli anahtarınız.</p>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <input type="text" id="api-key-box" readonly value="ai_live_99f8a4b2c1d3e5f67890" class="bg-studio-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 w-full md:w-72">
+                    <button onclick="copyApiKey()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl transition whitespace-nowrap">
+                        <i class="fa-solid fa-copy mr-1"></i> Kopyala
+                    </button>
+                    <button onclick="generateApiKey()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3 py-2 rounded-xl transition" title="Yeni Anahtar Üret">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bakiye Yükleme Bonus Fırsatları Tablosu -->
         <div class="studio-card p-6 rounded-2xl mb-8">
             <h3 class="text-base font-bold mb-4 flex items-center gap-2 text-white">
-                <i class="fa-solid fa-gift text-indigo-400"></i> Bakiye Yükleme Bonus Fırsatları
+                <i class="fa-solid fa-gift text-indigo-400"></i> Katmanlı Bakiye Bonus Fırsatları
             </h3>
             <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
                 <div class="bg-studio-900 border border-slate-800 p-3 rounded-xl text-center">
                     <div class="text-[11px] text-slate-400">0 - 500 TL</div>
-                    <div class="font-bold text-slate-200 text-sm mt-1">%0 Bonus</div>
+                    <div class="font-bold text-slate-200 text-sm mt-1">%0 Bonus (Free Hak)</div>
                 </div>
                 <div class="bg-studio-900 border border-indigo-500/30 p-3 rounded-xl text-center">
                     <div class="text-[11px] text-slate-400">1,000 TL</div>
@@ -236,83 +254,79 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 space-y-6">
-                <h3 class="text-lg font-bold flex items-center gap-2 text-white">
-                    <i class="fa-solid fa-store text-indigo-400"></i> AI Kredi & Jeton Paketleri
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Esnek Bakiye Yükleme ve Ödeme Yöntemi -->
+            <div class="studio-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-base font-bold flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-wallet text-emerald-400"></i> Esnek Bakiye Yükle
                 </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="studio-card p-5 rounded-xl space-y-4">
-                        <div class="flex justify-between items-start">
-                            <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-2.5 py-1 rounded-md">Başlangıç</span>
-                            <span class="text-xs text-slate-500">Stokta Var</span>
-                        </div>
-                        <div>
-                            <h4 class="text-base font-bold text-white">1,000 AI Kredisi</h4>
-                            <p class="text-xs text-slate-400 mt-1">GPT-4o / Claude 3.5 sorguları için geçerli paket.</p>
-                        </div>
-                        <div class="flex justify-between items-center pt-2">
-                            <span class="text-2xl font-black text-slate-100">150 TL</span>
-                            <button onclick="buyCreditPackage('1000 AI Kredisi', 150)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition">
-                                Satın Al
-                            </button>
-                        </div>
-                    </div>
 
-                    <div class="studio-card p-5 rounded-xl border border-purple-500/40 relative space-y-4">
-                        <span class="absolute -top-2.5 right-4 bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Çok Satan</span>
-                        <div class="flex justify-between items-start">
-                            <span class="bg-purple-500/10 text-purple-400 text-xs font-semibold px-2.5 py-1 rounded-md">Pro Paket</span>
-                        </div>
-                        <div>
-                            <h4 class="text-base font-bold text-white">5,000 AI Kredisi</h4>
-                            <p class="text-xs text-slate-400 mt-1">Ağır metin ve görsel oluşturma istekleri için ideal.</p>
-                        </div>
-                        <div class="flex justify-between items-center pt-2">
-                            <div>
-                                <span class="text-2xl font-black text-slate-100">650 TL</span>
-                                <span class="text-xs text-slate-500 line-through ml-1">750 TL</span>
-                            </div>
-                            <button onclick="buyCreditPackage('5000 AI Kredisi', 650)" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition">
-                                Satın Al
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-6">
-                <h3 class="text-lg font-bold flex items-center gap-2 text-white">
-                    <i class="fa-solid fa-wallet text-emerald-400"></i> Bakiye Yükle (Kripto)
-                </h3>
-                
-                <div class="studio-card p-5 rounded-2xl space-y-4">
-                    <div>
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Ağ Seçin (USDT)</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button class="bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2 rounded-lg">USDT (TRC-20)</button>
-                            <button class="bg-studio-900 border border-slate-800 text-slate-600 font-semibold text-xs py-2 rounded-lg cursor-not-allowed">USDT (ERC-20)</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Transfer Edilecek Cüzdan Adresi:</label>
-                        <div class="bg-studio-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
-                            <span class="text-xs font-mono text-slate-300 truncate mr-2" id="wallet-address">TNWyId6sBqLYmHLsGnqZv2LupXsTfvrkVd</span>
-                            <button onclick="copyWallet()" class="text-indigo-400 hover:text-indigo-300 text-xs font-semibold px-2 py-1 bg-indigo-500/10 rounded-md transition">Kopyala</button>
-                        </div>
-                    </div>
-
-                    <div class="pt-2 border-t border-slate-800 space-y-3">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Ödeme Onayı Bildir</label>
-                        <input type="number" id="usdt-amount" placeholder="Gönderdiğiniz USDT Miktarı" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-white">
-                        <button onclick="submitTopup()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition text-xs">
-                            Ödeme Yaptım, Bakiyemi Yükle
+                <div>
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Ödeme Yöntemi Seçin</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="method-crypto" onclick="setPaymentMethod('crypto')" class="bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2.5 rounded-xl transition">
+                            <i class="fa-solid fa-coins mr-1"></i> Kripto (USDT)
+                        </button>
+                        <button id="method-cc" onclick="setPaymentMethod('cc')" class="bg-studio-900 border border-slate-800 text-slate-400 font-semibold text-xs py-2.5 rounded-xl transition">
+                            <i class="fa-solid fa-credit-card mr-1"></i> Kredi Kartı (İyzico)
                         </button>
                     </div>
                 </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Yüklenecek Tutar (TL)</label>
+                    <p class="text-[11px] text-slate-500 mb-2">0 - 500 TL arası serbest tutar girebilirsiniz (501 TL üzeri bonus katmanına girer).</p>
+                    <input type="number" id="custom-tl-amount" oninput="calculateTopup()" placeholder="Örn: 250 veya 1000" min="1" max="50000" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-white font-mono">
+                </div>
+
+                <!-- Kripto Detay Alanı -->
+                <div id="crypto-payment-box" class="space-y-3 pt-2 border-t border-slate-800">
+                    <div class="flex justify-between items-center bg-studio-900 p-3 rounded-xl border border-slate-800 text-xs font-mono">
+                        <span class="text-slate-400">Ödenecek USDT Karşılığı:</span>
+                        <span id="usdt-conversion" class="text-emerald-400 font-bold">0.00 USDT (Kur: 34 TL)</span>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 block mb-1">Transfer Edilecek USDT (TRC-20) Adresi:</label>
+                        <div class="bg-studio-900 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between">
+                            <span class="text-[11px] font-mono text-slate-300 truncate mr-2" id="wallet-address">TNWyId6sBqLYmHLsGnqZv2LupXsTfvrkVd</span>
+                            <button onclick="copyWallet()" class="text-indigo-400 text-xs font-semibold px-2 py-1 bg-indigo-500/10 rounded-md">Kopyala</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kredi Kartı Detay Alanı (İyzico) -->
+                <div id="cc-payment-box" class="space-y-3 pt-2 border-t border-slate-800 hidden">
+                    <div class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl text-amber-300 text-xs">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> İyzico entegrasyonu tamamlanma aşamasındadır. Şimdilik test ödemesi simüle edilebilir.
+                    </div>
+                </div>
+
+                <button onclick="submitTopupRequest()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition text-xs shadow-lg shadow-emerald-600/20">
+                    Ödeme Bildirimi Gönder
+                </button>
             </div>
+
+            <!-- API Bilgilendirme ve Kullanım -->
+            <div class="studio-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-base font-bold flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-terminal text-indigo-400"></i> Hızlı API Entegrasyon Örneği
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Ürettiğiniz API anahtarını `Authorization: Bearer` başlığı ile kullanarak doğrudan istek atabilirsiniz:
+                </p>
+                <div class="bg-black/80 border border-slate-800 p-4 rounded-xl font-mono text-[11px] text-indigo-300 overflow-x-auto space-y-1">
+                    <div class="text-slate-500">// Örnek cURL İsteği</div>
+                    <div>curl -X POST https://aikredibackend.online/v1/generate \</div>
+                    <div class="pl-4">-H "Authorization: Bearer <span class="text-emerald-400">ai_live_...</span>" \</div>
+                    <div class="pl-4">-d '{"model": "claude-3.5-sonnet", "prompt": "Hello AI"}'</div>
+                </div>
+                <div class="pt-4 border-t border-slate-800">
+                    <div class="text-xs text-slate-400 mb-1">Mevcut API Durumu: <span class="text-emerald-400 font-bold">Aktif & Bağlı</span></div>
+                    <div class="text-xs text-slate-400">Toplam Sorgu Ücretlendirme: <span class="text-white font-mono">0.05 TL / İstek</span></div>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -343,9 +357,10 @@
     </footer>
 
     <script>
-        // Uzay Animasyonu (Dönen Jetonlar)
+        // Uzay Animasyonu (Giriş yapınca gizlenecek)
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
+        let animationActive = true;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -355,21 +370,25 @@
         resizeCanvas();
 
         const tokens = [];
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 25; i++) {
             tokens.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                size: Math.random() * 10 + 5,
-                speedY: -(Math.random() * 0.6 + 0.2),
-                speedX: (Math.random() - 0.5) * 0.3,
+                size: Math.random() * 8 + 4,
+                speedY: -(Math.random() * 0.5 + 0.2),
+                speedX: (Math.random() - 0.5) * 0.2,
                 rotation: Math.random() * Math.PI * 2,
                 rotSpeed: (Math.random() - 0.5) * 0.02,
-                opacity: Math.random() * 0.4 + 0.2,
+                opacity: Math.random() * 0.3 + 0.2,
                 color: Math.random() > 0.5 ? '#6366f1' : '#a855f7'
             });
         }
 
         function drawTokens() {
+            if (!animationActive) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             tokens.forEach(t => {
                 ctx.save();
@@ -426,11 +445,13 @@
         }, 5000);
 
         function showLanding() {
+            animationActive = true;
             document.getElementById('landing-page').classList.remove('hidden');
             document.getElementById('app-dashboard').classList.add('hidden');
         }
 
         function showDashboard() {
+            animationActive = false; // Giriş yapınca balonları durdur/kaldır
             document.getElementById('landing-page').classList.add('hidden');
             document.getElementById('app-dashboard').classList.remove('hidden');
             document.getElementById('user-header-info').classList.remove('hidden');
@@ -455,34 +476,102 @@
 
         function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
         function enterAsGuest() { showAuthModal('guest'); }
+        
         function handleAuthSubmit(e) {
             e.preventDefault();
             closeAuthModal();
             showDashboard();
-            showToast('Başarıyla giriş yapıldı!', 'success');
+            showToast('Başarıyla giriş yapıldı ve API anahtarınız yüklendi!', 'success');
         }
+
         function logout() {
             document.getElementById('user-header-info').classList.add('hidden');
             showLanding();
             showToast('Çıkış yapıldı.', 'info');
         }
+
+        // Ödeme Yöntemi Seçimi
+        let currentPaymentMethod = 'crypto';
+        function setPaymentMethod(method) {
+            currentPaymentMethod = method;
+            const btnCrypto = document.getElementById('method-crypto');
+            const btnCc = document.getElementById('method-cc');
+            const boxCrypto = document.getElementById('crypto-payment-box');
+            const boxCc = document.getElementById('cc-payment-box');
+
+            if(method === 'crypto') {
+                btnCrypto.className = "bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2.5 rounded-xl transition";
+                btnCc.className = "bg-studio-900 border border-slate-800 text-slate-400 font-semibold text-xs py-2.5 rounded-xl transition";
+                boxCrypto.classList.remove('hidden');
+                boxCc.classList.add('hidden');
+            } else {
+                btnCc.className = "bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2.5 rounded-xl transition";
+                btnCrypto.className = "bg-studio-900 border border-slate-800 text-slate-400 font-semibold text-xs py-2.5 rounded-xl transition";
+                boxCc.classList.remove('hidden');
+                boxCrypto.classList.add('hidden');
+            }
+        }
+
+        // Tutar ve USDT Hesaplama (Kur: 34 TL)
+        function calculateTopup() {
+            const tlInput = document.getElementById('custom-tl-amount').value;
+            const usdtSpan = document.getElementById('usdt-conversion');
+            const rate = 34.0; // USDT-TL oranı
+
+            if(!tlInput || tlInput <= 0) {
+                usdtSpan.innerText = "0.00 USDT (Kur: 34 TL)";
+                return;
+            }
+
+            const usdtVal = (tlInput / rate).toFixed(2);
+            usdtSpan.innerText = `${usdtVal} USDT (Kur: 34 TL)`;
+
+            if(tlInput > 500) {
+                // Bonus katmanı aktif
+                usdtSpan.innerText += " ✨ (%+ Bonus Uygulanacak)";
+            }
+        }
+
+        function submitTopupRequest() {
+            const tlInput = document.getElementById('custom-tl-amount').value;
+            if(!tlInput || tlInput <= 0) {
+                showToast('Lütfen geçerli bir tutar girin.', 'error');
+                return;
+            }
+            if(tlInput > 50000) {
+                showToast('Maksimum yükleme limitini aştınız.', 'error');
+                return;
+            }
+            showToast(`${tlInput} TL bakiye bildiriminiz alındı! Onay bekleniyor.`, 'success');
+            document.getElementById('custom-tl-amount').value = '';
+        }
+
+        // API Key İşlemleri
+        function copyApiKey() {
+            const keyBox = document.getElementById('api-key-box');
+            navigator.clipboard.writeText(keyBox.value);
+            showToast('API Anahtarı panoya kopyalandı!', 'success');
+        }
+
+        function generateApiKey() {
+            const randomStr = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            document.getElementById('api-key-box').value = `ai_live_${randomStr}`;
+            showToast('Yeni API anahtarı üretildi!', 'success');
+        }
+
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs shadow-xl`;
-            toast.innerText = message;
+            const bg = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-indigo-600';
+            toast.className = `${bg} text-white px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${message}</span>`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+
         function copyWallet() {
             navigator.clipboard.writeText(document.getElementById('wallet-address').innerText);
-            showToast('Cüzdan kopyalandı!', 'success');
-        }
-        function submitTopup() {
-            showToast('Ödeme bildirimi alındı!', 'success');
-        }
-        function buyCreditPackage(name, price) {
-            showToast(`${name} işleniyor...`, 'info');
+            showToast('Cüzdan adresi kopyalandı!', 'success');
         }
     </script>
 </body>
