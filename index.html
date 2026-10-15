@@ -20,8 +20,11 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
 
+  <!-- Toast Bildirim Alanı -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 space-y-3 pointer-events-none"></div>
+
   <!-- Header -->
-  <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+  <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <div class="bg-brand-600 p-2 rounded-xl text-2xl">⚡</div>
@@ -96,7 +99,7 @@
               <p class="text-slate-400 text-xs mt-1">GPT-4o / Claude 3.5 sorguları için geçerli paket.</p>
               <div class="text-2xl font-extrabold text-white mt-4">150 TL</div>
             </div>
-            <button onclick="buyCredit('1000 AI Kredisi', 150)" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition text-sm">Bakiyeden Satın Al</button>
+            <button onclick="buyCredit('pkg1', '1,000 AI Kredisi', 150)" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition text-sm">Bakiyeden Satın Al</button>
           </div>
 
           <!-- Paket 2 -->
@@ -110,7 +113,7 @@
               <p class="text-slate-400 text-xs mt-1">Ağır metin ve görsel oluşturma istekleri için ideal.</p>
               <div class="text-2xl font-extrabold text-white mt-4">650 TL <span class="text-xs text-slate-500 line-through">750 TL</span></div>
             </div>
-            <button onclick="buyCredit('5000 AI Kredisi', 650)" class="mt-4 w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-90 text-white font-semibold py-2.5 rounded-xl transition text-sm">Bakiyeden Satın Al</button>
+            <button onclick="buyCredit('pkg2', '5,000 AI Kredisi', 650)" class="mt-4 w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-90 text-white font-semibold py-2.5 rounded-xl transition text-sm">Bakiyeden Satın Al</button>
           </div>
 
           <!-- Paket 3 -->
@@ -123,10 +126,10 @@
               <p class="text-slate-400 text-xs mt-1">Yüksek hacimli API kullanımı yapanlar için en ucuz birim fiyat.</p>
               <div class="text-2xl font-extrabold text-white mt-4">2,200 TL</div>
             </div>
-            <button onclick="buyCredit('20000 AI Kredisi', 2200)" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition text-sm">Bakiyeden Satın Al</button>
+            <button onclick="buyCredit('pkg3', '20,000 AI Kredisi', 2200)" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition text-sm">Bakiyeden Satın Al</button>
           </div>
 
-          <!-- Paket 4 (Gelecekte Ek Satışlar İçin Örnek) -->
+          <!-- Paket 4 -->
           <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-indigo-500/50 transition flex flex-col justify-between">
             <div>
               <div class="flex justify-between items-start mb-2">
@@ -136,7 +139,7 @@
               <p class="text-slate-400 text-xs mt-1">Hazır otomasyon şablonları ve premium istem koleksiyonu.</p>
               <div class="text-2xl font-extrabold text-white mt-4">450 TL</div>
             </div>
-            <button onclick="buyCredit('AI Prompt Paketi', 450)" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl transition text-sm">Bakiyeden Satın Al</button>
+            <button onclick="buyCredit('pkg4', 'Özel AI Prompt & Bot Paketi', 450)" class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl transition text-sm">Bakiyeden Satın Al</button>
           </div>
         </div>
       </div>
@@ -189,6 +192,30 @@
     const API_BASE = 'https://ai-kredi-backend-mx2t.onrender.com';
     let activeNetwork = 'TRC20';
     let wallets = {};
+    let currentBalance = 0.00;
+
+    function updateBalanceUI() {
+      document.getElementById('userBalance').innerText = `${currentBalance.toFixed(2)} TL`;
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const bgClass = type === 'success' ? 'bg-emerald-900/90 border-emerald-500 text-emerald-200' :
+                      type === 'error' ? 'bg-rose-900/90 border-rose-500 text-rose-200' :
+                      'bg-indigo-900/90 border-indigo-500 text-indigo-200';
+
+      toast.className = `pointer-events-auto border px-4 py-3 rounded-xl shadow-2xl text-xs font-semibold backdrop-blur flex items-center justify-between transition-all duration-300 transform translate-x-full`;
+      toast.className += ` ${bgClass}`;
+      toast.innerText = message;
+
+      container.appendChild(toast);
+      setTimeout(() => toast.classList.remove('translate-x-full'), 10);
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
 
     // Cüzdan bilgilerini çek
     async function loadWallets() {
@@ -219,7 +246,7 @@
     function copyWallet() {
       const text = document.getElementById('walletAddressDisplay').innerText;
       navigator.clipboard.writeText(text);
-      alert('Cüzdan adresi kopyalandı!');
+      showToast('Cüzdan adresi panoya kopyalandı!', 'info');
     }
 
     async function submitCryptoPayment(e) {
@@ -242,22 +269,61 @@
         if(data.success) {
           statusDiv.className = 'text-xs p-3 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 block';
           statusDiv.innerHTML = `✅ ${data.message}<br><strong>Toplam Bakiye:</strong> ${data.details.toplamCuzdanaYansiyan} (Bonus dahil)`;
+          
+          // Test amaçlı eklenen tutarı mevcut bakiye ile güncelle
+          const addedTl = parseFloat(data.details.toplamCuzdanaYansiyan.replace(' TL', ''));
+          currentBalance += addedTl;
+          updateBalanceUI();
+
+          showToast(`Bakiyenize ${data.details.toplamCuzdanaYansiyan} başarıyla eklendi!`, 'success');
           document.getElementById('cryptoForm').reset();
         } else {
           statusDiv.className = 'text-xs p-3 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-300 block';
           statusDiv.innerText = data.error || 'İşlem başarısız.';
+          showToast(data.error || 'İşlem başarısız.', 'error');
         }
       } catch (err) {
         statusDiv.className = 'text-xs p-3 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-300 block';
         statusDiv.innerText = 'Sunucuyla bağlantı kurulamadı.';
+        showToast('Sunucuyla bağlantı kurulamadı.', 'error');
       }
     }
 
-    function buyCredit(packageName, price) {
-      alert(`${packageName} (${price} TL) satın alma talebi alındı! Bakiyeniz entegre edildiğinde otomatik düşecektir.`);
+    async function buyCredit(packageId, packageName, price) {
+      if (currentBalance < price) {
+        showToast(`Yetersiz Bakiye! Bu paket için ${price} TL gerekiyor. Mevcut bakiyeniz: ${currentBalance.toFixed(2)} TL`, 'error');
+        // Kripto yükleme alanına hafifçe kaydır
+        document.getElementById('cryptoForm').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/wallet/purchase`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: 1,
+            packageId: packageId,
+            priceTl: price,
+            creditAmount: packageName
+          })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          currentBalance -= price;
+          updateBalanceUI();
+          showToast(`🎉 Satın Alma Başarılı! ${packageName} hesabınıza eklendi.`, 'success');
+        } else {
+          showToast(data.error || 'Satın alma işlemi başarısız.', 'error');
+        }
+      } catch (err) {
+        showToast('Satın alma sırasında bir hata oluştu.', 'error');
+      }
     }
 
     loadWallets();
+    updateBalanceUI();
   </script>
 </body>
 </html>

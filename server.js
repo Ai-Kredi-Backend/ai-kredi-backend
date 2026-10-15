@@ -99,7 +99,29 @@ app.post('/api/wallet/crypto-topup', async (req, res) => {
   }
 });
 
-// 3. Kesin Yönlendirme (Regex /.*/ kullanarak path hatası engellendi)
+// 3. Bakiyeden Paket Satın Alma Endpoint'i
+app.post('/api/wallet/purchase', async (req, res) => {
+  try {
+    const { userId, packageId, priceTl, creditAmount } = req.body;
+
+    if (!priceTl || !creditAmount) {
+      return res.status(400).json({ success: false, error: 'Eksik satın alma bilgisi.' });
+    }
+
+    res.json({
+      success: true,
+      message: `Tebrikler! ${creditAmount} AI Kredisi başarıyla hesabınıza tanımlandı.`,
+      details: {
+        harcananTutar: priceTl + ' TL',
+        alinanKredi: creditAmount
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 4. Kesin Yönlendirme (Regex /.*/ kullanarak path hatası engellendi)
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
