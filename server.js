@@ -98,6 +98,72 @@ app.post('/api/credit/add', async (req, res) => {
     res.status(500).json({ error: 'İşlem başarısız veya tx_hash zaten kullanılmış.' });
   }
 });
+// --- BONUS HESAPLAMA MOTORU ---
+function calculateBonus(amount) {
+  let bonusRate = 0;
+  if (amount >= 10000) {
+    bonusRate = 0.125; // %12.5
+  } else if (amount >= 5000) {
+    bonusRate = 0.10;  // %10
+  } else if (amount >= 2500) {
+    bonusRate = 0.08;  // %8
+  } else if (amount >= 1000) {
+    bonusRate = 0.05;  // %5
+  } else {
+    bonusRate = 0.0;   // 0 - 500 TL arası bonussuz
+  }
+  
+  const bonusAmount = amount * bonusRate;
+  const totalBalance = amount + bonusAmount;
+  return { amount, bonusRate, bonusAmount, totalBalance };
+}
 
+// --- 1. BAKİYE YÜKLEME API'Sİ (Bonus Hesaplamalı) ---
+app.post('/api/wallet/topup', async (req, res) => {
+  try {
+    const { userId, amount, paymentMethod } = req.body; // paymentMethod: 'havale', 'kk', 'kripto', 'doviz'
+    
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: 'Geçersiz tutar!' });
+    }
+
+    const calculation = calculateBonus(Number(amount));
+
+    // Not: Neon DB bağlantın üzerinden kullanıcının bakiyesini güncelleyeceksin.
+    // Örnek SQL: UPDATE users SET balance = balance + $1 WHERE id = $2;
+    
+    res.json({
+      success: true,
+      message: 'Bakiye başarıyla yüklendi ve bonus eklendi!',
+      details: {
+        yatirilanTutar: calculation.amount,
+        bonusOrani: `%%${calculation.bonusRate * 100}`,
+        eklenenBonus: calculation.bonusAmount,
+        cüzdanaYansıyanToplam: calculation.totalBalance,
+        odemeYontemi: paymentMethod
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// --- 2. BAKİYEDEN KREDİ / AI JETONU SATIN ALMA API'Sİ ---
+app.post('/api/credit/buy-with-balance', async (req, res) => {
+  try {
+    const { userId, creditPackageId, packagePrice, creditAmount } = req.body;
+    
+    // Kullanıcının cüzdan bakiyesini kontrol et ve düş, ardından krediyi tanımla.
+
+    res.json({
+      success: true,
+      message: `${creditAmount} adet kredi başarıyla satın alındı!`,
+      kalanBakiye: 0 // Güncel bakiye dönecek
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log('Sunucu ' + PORT + ' portunda ayakta!'));
+
