@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { Pool } = require('pg');
 require('dotenv').config();
 
@@ -9,8 +10,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Statik Dosya Sunumu (index.html'i ana sayfa yapar)
-app.use(express.static('.'));
+// Statik Dosya Sunumu (Tam Yol Belirterek)
+app.use(express.static(path.join(__dirname)));
 
 // Neon PostgreSQL Bağlantı Havuzu
 const pool = new Pool({
@@ -68,7 +69,7 @@ app.post('/api/wallet/crypto-topup', async (req, res) => {
     }
 
     const usdNum = Number(amountUsd);
-    const usdToTlRate = 34.0; // Sabit kur veya geliştirilebilir
+    const usdToTlRate = 34.0;
     const amountInTry = usdNum * usdToTlRate;
 
     // Kademe Bonus Hesaplama (%0 - %12.5)
@@ -98,9 +99,9 @@ app.post('/api/wallet/crypto-topup', async (req, res) => {
   }
 });
 
-// 3. Kesin Yönlendirme: Tüm bilinmeyen route'ları index.html'e bağlar
+// 3. Kesin Yönlendirme: index.html dosyasını doğrudan çağırır
 app.get('*', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Sunucuyu Başlat
