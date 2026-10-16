@@ -67,6 +67,20 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        .marquee {
+            display: flex;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+        .marquee-content {
+            display: flex;
+            gap: 1.5rem;
+            animation: scroll 30s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen font-sans flex flex-col justify-between relative selection:bg-indigo-500 selection:text-white">
@@ -84,17 +98,21 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <!-- Header Üzerinde Net Görünür Admin Giriş Butonu -->
-            <button onclick="openAdminModal()" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer">
+            <!-- Admin Giriş Butonu (Sadece Çıkış Durumunda Görünür) -->
+            <button id="btn-admin-trigger" onclick="openAdminModal()" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer">
                 <i class="fa-solid fa-shield-halved"></i> Admin Giriş
             </button>
 
+            <!-- Kullanıcı Giriş Bilgileri (Sadece Giriş Yapıldığında Görünür) -->
             <div id="user-header-info" style="display: none;" class="items-center gap-3">
                 <div class="bg-studio-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-2">
+                    <span class="text-slate-400">Kullanıcı:</span> <span id="current-user-email" class="text-indigo-300 font-bold">ornek@mail.com</span>
+                    <span id="account-type-badge" class="bg-indigo-500/20 text-indigo-300 text-[10px] px-1.5 py-0.5 rounded border border-indigo-500/30 font-sans">Üye</span>
+                    <span class="text-slate-600">|</span>
                     <span class="text-slate-400">Bakiye:</span> <span id="user-balance" class="font-bold text-emerald-400">0.00 TL</span>
                 </div>
-                <button onclick="goToLanding()" class="text-slate-400 hover:text-rose-400 text-xs transition cursor-pointer">
-                    <i class="fa-solid fa-right-from-bracket"></i>
+                <button onclick="goToLanding()" class="text-slate-400 hover:text-rose-400 text-xs transition cursor-pointer" title="Çıkış Yap">
+                    <i class="fa-solid fa-right-from-bracket"></i> Çıkış
                 </button>
             </div>
         </div>
@@ -142,10 +160,22 @@
                 </div>
             </div>
         </div>
+
+        <div class="marquee py-3 studio-card rounded-xl border border-slate-800">
+            <div class="marquee-content text-xs text-slate-300">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-bug text-amber-400"></i> Makro Böcek Belgeseli AI Videoları</span>
+                <span class="text-slate-600">•</span>
+                <span class="flex items-center gap-2"><i class="fa-solid fa-music text-purple-400"></i> Suno & Udio Tam Albüm Üretimi</span>
+                <span class="text-slate-600">•</span>
+                <span class="flex items-center gap-2"><i class="fa-solid fa-code text-indigo-400"></i> ChatGPT-4o & Claude 3.5 API Bağlantısı</span>
+            </div>
+        </div>
     </main>
 
     <!-- ==================== 2. APP DASHBOARD ==================== -->
     <main id="app-dashboard" style="display: none;" class="container mx-auto px-4 py-8 max-w-6xl flex-1 relative z-10">
+        
+        <!-- API Key Box -->
         <div class="studio-card p-6 rounded-2xl mb-8 border border-indigo-500/30">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -156,9 +186,137 @@
                 </div>
                 <div class="flex items-center gap-2 w-full md:w-auto">
                     <input type="text" id="api-key-box" readonly value="ai_live_99f8a4b2c1d3e5f67890" class="bg-studio-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 w-full md:w-72">
-                    <button onclick="copyApiKey()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl transition cursor-pointer">Kopyala</button>
+                    <button onclick="copyApiKey()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl transition whitespace-nowrap cursor-pointer">
+                        <i class="fa-solid fa-copy mr-1"></i> Kopyala
+                    </button>
+                    <button onclick="generateNewKey()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3 py-2 rounded-xl transition cursor-pointer" title="Yeni Anahtar Üret">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
                 </div>
             </div>
+        </div>
+
+        <!-- Katmanlı Bonus Tablosu -->
+        <div class="studio-card p-6 rounded-2xl mb-8">
+            <h3 class="text-base font-bold mb-4 flex items-center gap-2 text-white">
+                <i class="fa-solid fa-gift text-indigo-400"></i> Katmanlı Bakiye Bonus Fırsatları
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div class="bg-studio-900 border border-slate-800 p-3 rounded-xl text-center">
+                    <div class="text-[11px] text-slate-400">0 - 500 TL</div>
+                    <div class="font-bold text-slate-200 text-sm mt-1">%0 Bonus</div>
+                </div>
+                <div class="bg-studio-900 border border-indigo-500/30 p-3 rounded-xl text-center">
+                    <div class="text-[11px] text-slate-400">1,000 TL</div>
+                    <div class="font-bold text-indigo-400 text-sm mt-1">+%5 Bonus</div>
+                </div>
+                <div class="bg-studio-900 border border-indigo-500/30 p-3 rounded-xl text-center">
+                    <div class="text-[11px] text-slate-400">2,500 TL</div>
+                    <div class="font-bold text-indigo-400 text-sm mt-1">+%8 Bonus</div>
+                </div>
+                <div class="bg-studio-900 border border-indigo-500/30 p-3 rounded-xl text-center">
+                    <div class="text-[11px] text-slate-400">5,000 TL</div>
+                    <div class="font-bold text-indigo-400 text-sm mt-1">+%10 Bonus</div>
+                </div>
+                <div class="bg-studio-900 border border-purple-500/40 p-3 rounded-xl text-center col-span-2 md:col-span-1">
+                    <div class="text-[11px] text-slate-400">10,000 TL+</div>
+                    <div class="font-bold text-purple-400 text-sm mt-1">+%12.5 Bonus</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Esnek Bakiye ve Ödeme -->
+            <div class="studio-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-base font-bold flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-wallet text-emerald-400"></i> Esnek Bakiye Yükle
+                </h3>
+
+                <div>
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Ödeme Yöntemi Seçin</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="method-crypto" onclick="selectPaymentMethod('crypto')" class="bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2.5 rounded-xl transition cursor-pointer">
+                            <i class="fa-solid fa-coins mr-1"></i> Kripto (USDT)
+                        </button>
+                        <button id="method-cc" onclick="selectPaymentMethod('cc')" class="bg-studio-900 border border-slate-800 text-slate-400 font-semibold text-xs py-2.5 rounded-xl transition cursor-pointer">
+                            <i class="fa-solid fa-credit-card mr-1"></i> Kredi Kartı / Havale
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Yüklenecek Tutar (TL)</label>
+                    <p class="text-[11px] text-slate-500 mb-2">Serbest tutar girebilir veya sağdaki hızlı seçenekleri kullanabilirsiniz.</p>
+                    
+                    <div class="relative flex items-center">
+                        <input type="number" id="custom-tl-amount" oninput="calculateBonus()" placeholder="Örn: 500" min="1" max="50000" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-white font-mono pr-32">
+                        
+                        <div class="absolute right-2">
+                            <button type="button" onclick="toggleDropdown()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold rounded-lg px-3 py-1.5 flex items-center gap-1.5 transition shadow-md cursor-pointer">
+                                <span id="dropdown-btn-text">Hızlı Seç</span> <i class="fa-solid fa-chevron-down text-[9px]"></i>
+                            </button>
+
+                            <div id="custom-dropdown-list" style="display: none;" class="absolute right-0 mt-2 w-48 bg-[#0c0e14] border border-indigo-500/40 rounded-xl shadow-2xl py-1.5 z-50">
+                                <div onclick="setAmount(1000)" class="px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
+                                    <span>1,000 TL</span> <span class="text-[10px] text-indigo-400 font-semibold">+%5</span>
+                                </div>
+                                <div onclick="setAmount(2500)" class="px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
+                                    <span>2,500 TL</span> <span class="text-[10px] text-indigo-400 font-semibold">+%8</span>
+                                </div>
+                                <div onclick="setAmount(5000)" class="px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
+                                    <span>5,000 TL</span> <span class="text-[10px] text-indigo-400 font-semibold">+%10</span>
+                                </div>
+                                <div onclick="setAmount(10000)" class="px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
+                                    <span>10,000 TL</span> <span class="text-[10px] text-purple-400 font-semibold">+%12.5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ödeme Detay Kutusu -->
+                <div id="crypto-payment-box" class="space-y-3 pt-2 border-t border-slate-800">
+                    <div class="flex justify-between items-center bg-studio-900 p-3 rounded-xl border border-slate-800 text-xs font-mono">
+                        <span class="text-slate-400">Yüklenecek Net Bakiye:</span>
+                        <span id="calculated-total" class="font-bold text-emerald-400">0.00 TL</span>
+                    </div>
+                    <div class="bg-studio-900/60 p-3 rounded-xl border border-slate-800/80 space-y-1 text-xs">
+                        <div class="flex justify-between text-slate-400">
+                            <span>TRC20 Cüzdan Adresi:</span>
+                            <button onclick="copyWallet()" class="text-indigo-400 hover:underline text-[11px] cursor-pointer"><i class="fa-solid fa-copy"></i> Kopyala</button>
+                        </div>
+                        <p id="wallet-address" class="font-mono text-[11px] text-slate-200 break-all select-all">T9xP8qW2vN5mL1kJ3hG4fD6sA7zC9vB8nM</p>
+                    </div>
+                    <button onclick="notifyPayment()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-600/20 cursor-pointer">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Ödemeyi Yaptım, Bildir
+                    </button>
+                </div>
+            </div>
+
+            <!-- cURL Entegrasyon Rehberi -->
+            <div class="studio-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-base font-bold flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-terminal text-indigo-400"></i> Hızlı API Kullanım Dokümanı
+                </h3>
+                <p class="text-xs text-slate-400">Sisteminizden doğrudan istek atmak için cURL örneği:</p>
+                
+                <div class="bg-studio-900 border border-slate-800 p-4 rounded-xl relative group">
+                    <pre class="text-[11px] font-mono text-indigo-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+curl -X POST https://aikredibackend.online/v1/chat/completions \
+  -H "Authorization: Bearer <span id="curl-key-display" class="text-emerald-400">ai_live_99f8a4b2...</span>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [{"role": "user", "content": "Merhaba!"}]
+  }'</pre>
+                </div>
+                <div class="text-[11px] text-slate-500 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-indigo-400"></i>
+                    <span>Tüm istekler doğrudan bakiye hesabınızdan tahsil edilir.</span>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -173,6 +331,7 @@
             <button onclick="closeUserModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition cursor-pointer text-lg">✕</button>
             <h2 id="modal-title" class="text-xl font-bold text-white mb-2">Giriş Yap</h2>
             <p id="modal-desc" class="text-xs text-slate-400 mb-6">Hesabınıza erişmek için bilgilerinizi girin.</p>
+
             <form onsubmit="handleUserSubmit(event)" class="space-y-4">
                 <div>
                     <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">E-Posta Adresi</label>
@@ -210,9 +369,12 @@
         </div>
     </div>
 
-    <!-- JS Fonksiyonları (Inline Garantili) -->
+    <!-- JS Fonksiyonları (Kesin Çalışan Kararlı Yapı) -->
     <script>
+        let currentAuthMode = 'login';
+
         function openUserModal(type) {
+            currentAuthMode = type;
             const modal = document.getElementById('auth-modal');
             const title = document.getElementById('modal-title');
             const desc = document.getElementById('modal-desc');
@@ -230,7 +392,7 @@
                 desc.innerText = 'Kayıt olun ve bakiye bonuslarından faydalanın.';
                 passBox.style.display = 'block';
                 btn.innerText = 'Kayıt Ol ve Giriş Yap';
-            } else {
+            } else { // guest
                 title.innerText = 'Hızlı Misafir Girişi';
                 desc.innerText = 'Şifresiz, sadece e-posta adresinizle hemen API anahtarı alın.';
                 passBox.style.display = 'none';
@@ -244,12 +406,30 @@
 
         function handleUserSubmit(e) {
             e.preventDefault();
-            const email = document.getElementById('modal-email').value;
-            if (!email) return;
+            const emailField = document.getElementById('modal-email');
+            if (!emailField || !emailField.value) return;
+
+            const email = emailField.value;
             closeUserModal();
+
+            // Direkt dashboard'a al ve e-postayı yazdır
             document.getElementById('landing-page').style.display = 'none';
             document.getElementById('app-dashboard').style.display = 'block';
             document.getElementById('user-header-info').style.display = 'flex';
+            document.getElementById('btn-admin-trigger').style.display = 'none';
+            document.getElementById('current-user-email').innerText = email;
+
+            const badge = document.getElementById('account-type-badge');
+            if (currentAuthMode === 'guest') {
+                badge.innerText = 'Misafir';
+                badge.className = "bg-amber-500/20 text-amber-300 text-[10px] px-1.5 py-0.5 rounded border border-amber-500/30 font-sans";
+            } else if (currentAuthMode === 'register') {
+                badge.innerText = 'Kayıtlı Üye';
+                badge.className = "bg-emerald-500/20 text-emerald-300 text-[10px] px-1.5 py-0.5 rounded border border-emerald-500/30 font-sans";
+            } else {
+                badge.innerText = 'Aktif Üye';
+                badge.className = "bg-indigo-500/20 text-indigo-300 text-[10px] px-1.5 py-0.5 rounded border border-indigo-500/30 font-sans";
+            }
         }
 
         function openAdminModal() {
@@ -265,7 +445,6 @@
             const user = document.getElementById('admin-username').value;
             const pass = document.getElementById('admin-password').value;
             if (user === 'admin' && pass === 'AdiMin!58012583') {
-                alert('Admin girişi başarılı! Yönlendiriliyorsunuz...');
                 window.location.href = 'admin.html';
             } else {
                 alert('Hatalı Kullanıcı Adı veya Şifre!');
@@ -276,22 +455,31 @@
             document.getElementById('landing-page').style.display = 'flex';
             document.getElementById('app-dashboard').style.display = 'none';
             document.getElementById('user-header-info').style.display = 'none';
+            document.getElementById('btn-admin-trigger').style.display = 'flex';
         }
 
         function copyApiKey() {
-            navigator.clipboard.writeText('ai_live_99f8a4b2c1d3e5f67890');
+            navigator.clipboard.writeText(document.getElementById('api-key-box').value);
             alert('API Anahtarı kopyalandı!');
         }
 
-        // Yıldız Efekti
-        const canvas = document.getElementById('space-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        for (let i = 0; i < 50; i++) {
-            ctx.fillStyle = 'rgba(255,255,255,0.5)';
-            ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 1.5, 1.5);
+        function generateNewKey() {
+            const newKey = 'ai_live_' + Math.random().toString(36).substring(2, 14);
+            document.getElementById('api-key-box').value = newKey;
+            document.getElementById('curl-key-display').innerText = newKey.substring(0, 15) + '...';
+            alert('Yeni API anahtarı üretildi!');
         }
-    </script>
-</body>
-</html>
+
+        function selectPaymentMethod(method) {
+            const btnCrypto = document.getElementById('method-crypto');
+            const btnCc = document.getElementById('method-cc');
+            if (method === 'crypto') {
+                btnCrypto.className = "bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2.5 rounded-xl transition cursor-pointer";
+                btnCc.className = "bg-studio-900 border border-slate-800 text-slate-400 font-semibold text-xs py-2.5 rounded-xl transition cursor-pointer";
+            } else {
+                btnCc.className = "bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2.5 rounded-xl transition cursor-pointer";
+                btnCrypto.className = "bg-studio-900 border border-slate-800 text-slate-400 font-semibold text-xs py-2.5 rounded-xl transition cursor-pointer";
+            }
+        }
+
+        function toggleDropdown()
