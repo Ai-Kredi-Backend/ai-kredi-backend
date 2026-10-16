@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Credit Hub — Admin Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        studio: {
+                            950: '#06070B',
+                            900: '#0C0E14',
+                            800: '#151821',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #06070B;
+            overflow-x: hidden;
+        }
+        .studio-card {
+            background: rgba(18, 21, 31, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen font-sans flex flex-col justify-between relative selection:bg-rose-500 selection:text-white">
+
+    <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3"></div>
+
+    <!-- Admin Header -->
+    <header class="studio-card sticky top-0 z-40 px-6 py-4 flex justify-between items-center border-b border-slate-800/80">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 via-purple-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-rose-500/20">
+                <i class="fa-solid fa-shield-halved text-white text-base"></i>
+            </div>
+            <div>
+                <span class="text-lg font-bold tracking-wider text-white">AI CREDIT <span class="text-rose-400 font-normal">ADMIN</span></span>
+                <span class="block text-[10px] text-slate-400 font-mono">Güvenli Komuta Merkezi</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <!-- Global Kill Switch Banner / Button -->
+            <div id="system-status-badge" class="bg-emerald-500/10 border border-emerald-500/40 px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-2">
+                <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="status-text" class="text-emerald-300 font-bold">SİSTEM AKTİF</span>
+            </div>
+            <button id="btn-kill-switch" class="bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-lg shadow-rose-600/30 flex items-center gap-1.5">
+                <i class="fa-solid fa-power-off"></i> ACİL DURUM: TÜMÜNÜ DURDUR
+            </button>
+        </div>
+    </header>
+
+    <!-- Admin Main Dashboard -->
+    <main class="container mx-auto px-4 py-8 max-w-7xl flex-1 space-y-8 relative z-10">
+        
+        <!-- Metrik Kartları -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="studio-card p-5 rounded-2xl border border-slate-800">
+                <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">Aktif Kullanıcılar</div>
+                <div class="text-2xl font-extrabold text-white mt-1 font-mono">1,248</div>
+                <div class="text-[11px] text-emerald-400 mt-1"><i class="fa-solid fa-arrow-up"></i> Son 1 saatte +42 yeni giriş</div>
+            </div>
+            <div class="studio-card p-5 rounded-2xl border border-slate-800">
+                <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">Günlük Ciro (Net)</div>
+                <div class="text-2xl font-extrabold text-emerald-400 mt-1 font-mono">48,750 TL</div>
+                <div class="text-[11px] text-slate-500 mt-1">USDT ve Havale Dahil</div>
+            </div>
+            <div class="studio-card p-5 rounded-2xl border border-slate-800">
+                <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">Onay Bekleyen İşlem</div>
+                <div id="pending-count-badge" class="text-2xl font-extrabold text-amber-400 mt-1 font-mono">3</div>
+                <div class="text-[11px] text-amber-500/80 mt-1">Aksiyon gerektiriyor</div>
+            </div>
+            <div class="studio-card p-5 rounded-2xl border border-slate-800">
+                <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">API İstek / Saniye</div>
+                <div class="text-2xl font-extrabold text-indigo-400 mt-1 font-mono">142 req/s</div>
+                <div class="text-[11px] text-indigo-300 mt-1">Render Altyapı Sağlıklı</div>
+            </div>
+        </div>
+
+        <!-- Onay Bekleyen Ödemeler Kuyruğu -->
+        <div class="studio-card p-6 rounded-2xl border border-amber-500/30 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Bakiye Onay Kuyruğu (TRC20 / Havale)
+                </h3>
+                <span class="text-xs bg-amber-500/10 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full font-mono">3 Bildirim Bekliyor</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-studio-900 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+                        <tr>
+                            <th class="p-3">Kullanıcı E-Posta</th>
+                            <th class="p-3">Yüklenen Tutar</th>
+                            <th class="p-3">Bonus & Toplam</th>
+                            <th class="p-3">Yöntem / Hash / Dekont</th>
+                            <th class="p-3 text-right">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payment-queue-body" class="divide-y divide-slate-800/60 font-mono">
+                        <tr class="hover:bg-studio-900/40 transition">
+                            <td class="p-3 text-indigo-300">ahmet@startup.com</td>
+                            <td class="p-3 text-white">5,000 TL</td>
+                            <td class="p-3 text-emerald-400">5,500 TL <span class="text-[10px] text-slate-500">(+%10)</span></td>
+                            <td class="p-3 text-slate-400">USDT (TRC20) - Hash: <span class="text-slate-200">0x8f7...c412</span></td>
+                            <td class="p-3 text-right space-x-2">
+                                <button onclick="approvePayment(this, 'ahmet@startup.com', '5500')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg transition font-sans font-bold">Onayla</button>
+                                <button onclick="rejectPayment(this)" class="bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white px-3 py-1.5 rounded-lg transition font-sans">Reddet</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-studio-900/40 transition">
+                            <td class="p-3 text-indigo-300">mehmet@ai-dev.net</td>
+                            <td class="p-3 text-white">10,000 TL</td>
+                            <td class="p-3 text-purple-400">11,250 TL <span class="text-[10px] text-slate-500">(+%12.5)</span></td>
+                            <td class="p-3 text-slate-400">Kredi Kartı (İyzico) - Ref: <span class="text-slate-200">TR-99421</span></td>
+                            <td class="p-3 text-right space-x-2">
+                                <button onclick="approvePayment(this, 'mehmet@ai-dev.net', '11250')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg transition font-sans font-bold">Onayla</button>
+                                <button onclick="rejectPayment(this)" class="bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white px-3 py-1.5 rounded-lg transition font-sans">Reddet</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-studio-900/40 transition">
+                            <td class="p-3 text-indigo-300">zeynep@creative.io</td>
+                            <td class="p-3 text-white">2,500 TL</td>
+                            <td class="p-3 text-indigo-400">2,700 TL <span class="text-[10px] text-slate-500">(+%8)</span></td>
+                            <td class="p-3 text-slate-400">Havale (Ziraat) - İsim: <span class="text-slate-200">Zeynep K.</span></td>
+                            <td class="p-3 text-right space-x-2">
+                                <button onclick="approvePayment(this, 'zeynep@creative.io', '2700')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg transition font-sans font-bold">Onayla</button>
+                                <button onclick="rejectPayment(this)" class="bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white px-3 py-1.5 rounded-lg transition font-sans">Reddet</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Canlı Kullanıcı Trafik ve Log Akışı -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="studio-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-indigo-400"></i> Son API İstekleri ve Tüketimler
+                </h3>
+                <div class="space-y-2 text-xs font-mono">
+                    <div class="bg-studio-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <div>
+                            <span class="text-indigo-400 font-bold">gpt-4o</span> <span class="text-slate-400">→ ahmet@startup.com</span>
+                            <div class="text-[10px] text-slate-500">2,450 token tüketildi (-0.75 TL)</div>
+                        </div>
+                        <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded">200 OK</span>
+                    </div>
+                    <div class="bg-studio-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <div>
+                            <span class="text-purple-400 font-bold">claude-3-5</span> <span class="text-slate-400">→ mehmet@ai-dev.net</span>
+                            <div class="text-[10px] text-slate-500">5,120 token tüketildi (-1.80 TL)</div>
+                        </div>
+                        <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded">200 OK</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manuel Bakiye Müdahale & Duyuru -->
+            <div class="studio-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-wallet text-emerald-400"></i> Manuel Bakiye Tanımlama
+                </h3>
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="text-slate-400 block mb-1 font-semibold uppercase tracking-wider">Kullanıcı E-Posta</label>
+                        <input type="email" placeholder="kullanici@mail.com" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1 font-semibold uppercase tracking-wider">Eklenecek / Çıkarılacak Tutar (TL)</label>
+                        <input type="number" placeholder="Örn: 1000 veya -500" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <button onclick="showToast('Manuel bakiye başarıyla işlendi!')" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/20">
+                        Bakiyeyi Güncelle
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 2FA / SMS Doğrulama Modal (Kill-Switch İçin) -->
+    <div id="auth-2fa-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="studio-card w-full max-w-md p-6 rounded-3xl border border-rose-500/50 relative space-y-4">
+            <h3 class="text-lg font-bold text-rose-400 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation"></i> Kritik Güvenlik Onayı (2FA)
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Sistemi tamamen durdurmak (Kill-Switch) veya global parametreleri değiştirmek üzeresiniz. Lütfen <strong class="text-white">info@aikredibackend.online</strong> adresine gönderilen veya SMS ile iletilen 6 haneli güvenlik kodunu girin:
+            </p>
+            <input type="text" id="sms-code-input" maxlength="6" placeholder="• • • • • •" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-3 text-center text-lg font-mono tracking-widest text-rose-400 focus:outline-none focus:border-rose-500">
+            
+            <div class="flex gap-2 pt-2">
+                <button onclick="confirmKillSwitch()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-lg shadow-rose-600/30">
+                    Onayla ve Sistemi Durdur
+                </button>
+                <button onclick="close2FAModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs transition">
+                    İptal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="studio-card py-4 text-center text-xs text-slate-500 border-t border-slate-800/80 relative z-10">
+        AI Credit Hub Admin Command Center © 2026 — Güvenli Bağlantı Aktif
+    </footer>
+
+    <!-- Admin JS Mantığı -->
+    <script>
+        let isSystemHalted = false;
+
+        document.getElementById('btn-kill-switch').addEventListener('click', () => {
+            if (!isSystemHalted) {
+                // Güvenlik için 2FA modalını aç
+                document.getElementById('auth-2fa-modal').classList.remove('hidden');
+            } else {
+                // Sistemi tekrar aktif et
+                isSystemHalted = false;
+                updateSystemStatus(false);
+                showToast('Sistem tekrar aktif duruma getirildi!');
+            }
+        });
+
+        function close2FAModal() {
+            document.getElementById('auth-2fa-modal').classList.add('hidden');
+            document.getElementById('sms-code-input').value = '';
+        }
+
+        function confirmKillSwitch() {
+            const code = document.getElementById('sms-code-input').value;
+            if (code.length < 4) {
+                alert('Lütfen geçerli bir doğrulama kodu girin!');
+                return;
+            }
+
+            isSystemHalted = true;
+            close2FAModal();
+            updateSystemStatus(true);
+            showToast('KRİTİK: Tüm sistem ve sipariş alımları acil olarak durduruldu!');
+        }
+
+        function updateSystemStatus(halted) {
+            const badge = document.getElementById('system-status-badge');
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+            const btn = document.getElementById('btn-kill-switch');
+
+            if (halted) {
+                badge.className = "bg-rose-500/10 border border-rose-500/40 px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-2";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping";
+                text.className = "text-rose-400 font-bold";
+                text.innerText = "SİSTEM DURDURULDU (KILL-SWITCH)";
+                btn.className = "bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-lg shadow-emerald-600/30 flex items-center gap-1.5";
+                btn.innerHTML = '<i class="fa-solid fa-play"></i> SİSTEMİ TEKRAR AÇ';
+            } else {
+                badge.className = "bg-emerald-500/10 border border-emerald-500/40 px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-2";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+                text.className = "text-emerald-300 font-bold";
+                text.innerText = "SİSTEM AKTİF";
+                btn.className = "bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-lg shadow-rose-600/30 flex items-center gap-1.5";
+                btn.innerHTML = '<i class="fa-solid fa-power-off"></i> ACİL DURUM: TÜMÜNÜ DURDUR';
+            }
+        }
+
+        function approvePayment(btn, email, amount) {
+            const row = btn.closest('tr');
+            row.style.opacity = '0.3';
+            setTimeout(() => row.remove(), 400);
+            
+            // Sayaç güncelleme
+            let badge = document.getElementById('pending-count-badge');
+            let currentCount = parseInt(badge.innerText) - 1;
+            badge.innerText = currentCount >= 0 ? currentCount : 0;
+
+            showToast(`${email} adresine ${amount} TL bakiye başarıyla onaylandı ve yüklendi!`);
+        }
+
+        function rejectPayment(btn) {
+            const row = btn.closest('tr');
+            row.style.opacity = '0.3';
+            setTimeout(() => row.remove(), 400);
+
+            let badge = document.getElementById('pending-count-badge');
+            let currentCount = parseInt(badge.innerText) - 1;
+            badge.innerText = currentCount >= 0 ? currentCount : 0;
+
+            showToast('Ödeme bildirimi reddedildi.');
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-rose-600 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl border border-rose-400 flex items-center gap-2 transition duration-300';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+    </script>
+</body>
+</html>
