@@ -103,7 +103,6 @@
 
     <!-- ==================== 1. LANDING PAGE ==================== -->
     <main id="landing-page" style="display: flex;" class="container mx-auto px-4 py-8 max-w-5xl flex-1 flex-col justify-center relative z-10">
-        
         <div class="text-center space-y-3 mb-6">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full studio-card border border-indigo-500/30 text-indigo-300 text-xs font-medium tracking-wide">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sınırsız AI Üretim Gücü — API Entegrasyonlu
@@ -118,7 +117,7 @@
 
         <div class="studio-card p-6 md:p-8 rounded-3xl mb-6 border border-indigo-500/40 relative overflow-hidden shadow-2xl">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div id="card-login" class="studio-card-interactive p-5 rounded-2xl group">
+                <div id="card-login" onclick="openAuthModal('login')" class="studio-card-interactive p-5 rounded-2xl group">
                     <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-base mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
                         <i class="fa-solid fa-right-to-bracket"></i>
                     </div>
@@ -126,139 +125,5 @@
                     <p class="text-slate-400 text-xs leading-relaxed">Mevcut hesabınla bağlan, API anahtarını yönet.</p>
                 </div>
 
-                <div id="card-register" class="studio-card-interactive p-5 rounded-2xl border border-indigo-500/40 relative group">
-                    <span class="absolute top-2.5 right-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-md">+%12.5 BONUS</span>
-                    <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-base mb-3 group-hover:bg-purple-600 group-hover:text-white transition">
-                        <i class="fa-solid fa-user-plus"></i>
-                    </div>
-                    <h3 class="text-sm font-bold text-white mb-1">Üye Ol</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">Hesap aç, katmanlı bakiye yüklemelerinde bonus kazan.</p>
-                </div>
-
-                <div id="card-guest" class="studio-card-interactive p-5 rounded-2xl border border-emerald-500/30 group">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base mb-3 group-hover:bg-emerald-600 group-hover:text-white transition">
-                        <i class="fa-solid fa-bolt-lightning"></i>
-                    </div>
-                    <h3 class="text-sm font-bold text-white mb-1">Üye Olmadan Hızlı Al</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">Sadece e-posta gir, anında API anahtarı al ve başla.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="marquee py-3 studio-card rounded-xl border border-slate-800">
-            <div class="marquee-content text-xs text-slate-300">
-                <span class="flex items-center gap-2"><i class="fa-solid fa-bug text-amber-400"></i> Makro Böcek Belgeseli AI Videoları</span>
-                <span class="text-slate-600">•</span>
-                <span class="flex items-center gap-2"><i class="fa-solid fa-music text-purple-400"></i> Suno & Udio Tam Albüm Üretimi</span>
-                <span class="text-slate-600">•</span>
-                <span class="flex items-center gap-2"><i class="fa-solid fa-code text-indigo-400"></i> ChatGPT-4o & Claude 3.5 API Bağlantısı</span>
-            </div>
-        </div>
-    </main>
-
-    <!-- ==================== 2. APP DASHBOARD ==================== -->
-    <main id="app-dashboard" style="display: none;" class="container mx-auto px-4 py-8 max-w-6xl flex-1 relative z-10">
-        
-        <!-- API Key Box -->
-        <div class="studio-card p-6 rounded-2xl mb-8 border border-indigo-500/30">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h3 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-key text-indigo-400"></i> AI Hub API Anahtarınız
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-1">Sora, Claude ve GPT entegrasyonlarınız için gizli anahtarınız.</p>
-                </div>
-                <div class="flex items-center gap-2 w-full md:w-auto">
-                    <input type="text" id="api-key-box" readonly value="ai_live_99f8a4b2c1d3e5f67890" class="bg-studio-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 w-full md:w-72">
-                    <button id="btn-copy" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl transition whitespace-nowrap">
-                        <i class="fa-solid fa-copy mr-1"></i> Kopyala
-                    </button>
-                    <button id="btn-regen" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-3 py-2 rounded-xl transition" title="Yeni Anahtar Üret">
-                        <i class="fa-solid fa-rotate"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Katmanlı Bonus Tablosu -->
-        <div class="studio-card p-6 rounded-2xl mb-8">
-            <h3 class="text-base font-bold mb-4 flex items-center gap-2 text-white">
-                <i class="fa-solid fa-gift text-indigo-400"></i> Katmanlı Bakiye Bonus Fırsatları
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <div class="bg-studio-900 border border-slate-800 p-3 rounded-xl text-center">
-                    <div class="text-[11px] text-slate-400">0 - 500 TL</div>
-                    <div class="font-bold text-slate-200 text-sm mt-1">%0 Bonus (Free Hak)</div>
-                </div>
-                <div class="bg-studio-900 border border-indigo-500/30 p-3 rounded-xl text-center">
-                    <div class="text-[11px] text-slate-400">1,000 TL</div>
-                    <div class="font-bold text-indigo-400 text-sm mt-1">+%5 Bonus</div>
-                </div>
-                <div class="bg-studio-900 border border-indigo-500/30 p-3 rounded-xl text-center">
-                    <div class="text-[11px] text-slate-400">2,500 TL</div>
-                    <div class="font-bold text-indigo-400 text-sm mt-1">+%8 Bonus</div>
-                </div>
-                <div class="bg-studio-900 border border-indigo-500/30 p-3 rounded-xl text-center">
-                    <div class="text-[11px] text-slate-400">5,000 TL</div>
-                    <div class="font-bold text-indigo-400 text-sm mt-1">+%10 Bonus</div>
-                </div>
-                <div class="bg-studio-900 border border-purple-500/40 p-3 rounded-xl text-center col-span-2 md:col-span-1">
-                    <div class="text-[11px] text-slate-400">10,000 TL+</div>
-                    <div class="font-bold text-purple-400 text-sm mt-1">+%12.5 Bonus</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <!-- Esnek Bakiye ve Ödeme -->
-            <div class="studio-card p-6 rounded-2xl space-y-4">
-                <h3 class="text-base font-bold flex items-center gap-2 text-white">
-                    <i class="fa-solid fa-wallet text-emerald-400"></i> Esnek Bakiye Yükle
-                </h3>
-
-                <div>
-                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Ödeme Yöntemi Seçin</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button id="method-crypto" class="bg-indigo-600/30 border border-indigo-500 text-indigo-300 font-semibold text-xs py-2.5 rounded-xl transition">
-                            <i class="fa-solid fa-coins mr-1"></i> Kripto (USDT)
-                        </button>
-                        <button id="method-cc" class="bg-studio-900 border border-slate-800 text-slate-400 font-semibold text-xs py-2.5 rounded-xl transition">
-                            <i class="fa-solid fa-credit-card mr-1"></i> Kredi Kartı (İyzico)
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Yüklenecek Tutar (TL)</label>
-                    <p class="text-[11px] text-slate-500 mb-2">0 - 500 TL arası serbest tutar girebilirsiniz (501 TL üzeri bonus katmanına girer).</p>
-                    
-                    <div class="relative flex items-center">
-                        <input type="number" id="custom-tl-amount" placeholder="0 - 500 TL (Serbest Tutar)" min="1" max="50000" class="w-full bg-studio-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-white font-mono pr-32">
-                        
-                        <div class="absolute right-2">
-                            <button type="button" id="dropdown-toggle-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold rounded-lg px-3 py-1.5 flex items-center gap-1.5 transition shadow-md">
-                                <span id="dropdown-btn-text">Hızlı Seç</span> <i class="fa-solid fa-chevron-down text-[9px]"></i>
-                            </button>
-
-                            <div id="custom-dropdown-list" class="hidden absolute right-0 mt-2 w-48 bg-[#0c0e14] border border-indigo-500/40 rounded-xl shadow-2xl py-1.5 z-50">
-                                <div data-val="1000" class="quick-item px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
-                                    <span>1,000 TL</span> <span class="text-[10px] text-indigo-400 font-semibold">+%5</span>
-                                </div>
-                                <div data-val="2500" class="quick-item px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
-                                    <span>2,500 TL</span> <span class="text-[10px] text-indigo-400 font-semibold">+%8</span>
-                                </div>
-                                <div data-val="5000" class="quick-item px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
-                                    <span>5,000 TL</span> <span class="text-[10px] text-indigo-400 font-semibold">+%10</span>
-                                </div>
-                                <div data-val="10000" class="quick-item px-4 py-2 text-xs text-slate-300 hover:bg-indigo-600 hover:text-white cursor-pointer transition flex justify-between items-center">
-                                    <span>10,000 TL</span> <span class="text-[10px] text-purple-400 font-semibold">+%12.5</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="crypto-payment-box" class="space-y-3 pt-2 border-t border-slate-800">
-                    <div class="flex justify-between items-center bg-studio-900 p-3 rounded-xl border border-slate-800 text-xs font-mono">
-                        <span class="
+                <div id="card-register" onclick="openAuthModal('register')" class="studio-card-interactive p-5 rounded-2xl border border-indigo-500/40 relative group">
+                    <span class="absolute top-2.5 right-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-[9px] font-
